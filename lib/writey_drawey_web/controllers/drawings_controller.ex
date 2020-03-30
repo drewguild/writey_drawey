@@ -3,8 +3,14 @@ defmodule WriteyDraweyWeb.DrawingsController do
 
   alias Jason
 
+  alias WriteyDrawey.{Drawing, Repo}
+
   def create(conn, %{"drawing_base64" => drawing}) do
-    # changeset = Drawing.changeset(%WriteyDrawey.Drawing{}, %{image_binary: drawing})
-    json(conn, %{success: true})
+    Drawing.changeset(%Drawing{}, %{image_binary: drawing})
+      |> Repo.insert
+      |> case do
+        {:ok, drawing} -> json(conn, %{success: true, drawing_id: Map.get(drawing, :id)})
+        {:error, _} -> json(conn, %{success: false})
+      end
   end
 end
