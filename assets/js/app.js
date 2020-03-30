@@ -18,9 +18,10 @@ import "phoenix_html"
 
 import React from 'react'
 import ReactDOM from 'react-dom';
+import Root from './Root.jsx'
 
 function App() {
-  return <h1>Hello world</h1>
+  return <Root />
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));

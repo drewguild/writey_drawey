@@ -13,14 +13,17 @@ defmodule WriteyDraweyWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", WriteyDraweyWeb do
+    pipe_through :api
+
+    post "/drawings", DrawingsController, :create
+
+    get "/prompts/random", PromptsController, :random
+  end
+
   scope "/", WriteyDraweyWeb do
     pipe_through :browser
 
     get "/", PageController, :index
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", WriteyDraweyWeb do
-  #   pipe_through :api
-  # end
 end
