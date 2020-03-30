@@ -16,6 +16,7 @@ defmodule WriteyDraweyWeb.Router do
   scope "/api", WriteyDraweyWeb do
     pipe_through :api
 
+    get "/drawings/:id", DrawingsController, :show
     post "/drawings", DrawingsController, :create
 
     get "/prompts/random", PromptsController, :random

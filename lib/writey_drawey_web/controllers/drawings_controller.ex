@@ -5,6 +5,12 @@ defmodule WriteyDraweyWeb.DrawingsController do
 
   alias WriteyDrawey.{Drawing, Repo}
 
+  def show(conn, _) do
+    drawing = Repo.get(Drawing, 4)
+      
+    render(conn, "show.json", drawing: drawing)
+  end
+
   def create(conn, %{"drawing_base64" => drawing}) do
     Drawing.changeset(%Drawing{}, %{image_binary: drawing})
       |> Repo.insert
