@@ -9,21 +9,21 @@ class Root extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {prompt: null};
+    this.state = { prompt: null };
 
     fetch('/api/prompts/random')
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        this.setState({prompt: data.prompt})
+        this.setState({ prompt: data.prompt })
       });
   };
 
   render() {
     return (
       <div>
-        <Prompt word={this.state.prompt}/>
+        <Prompt word={this.state.prompt} />
         <DrawingCanvas />
       </div>
     )

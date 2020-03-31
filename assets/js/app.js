@@ -23,7 +23,7 @@ import {
   Route,
   BrowserRouter as Router,
   Switch
- } from 'react-router-dom'
+} from 'react-router-dom'
 
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import Root from './Root.jsx'
@@ -36,7 +36,7 @@ function App() {
           <GuessDrawingPage />
         </Route>
         <Route path="/">
-          <Root/>
+          <Root />
         </Route>
       </Switch>
     </Router>

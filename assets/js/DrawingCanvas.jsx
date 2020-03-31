@@ -2,9 +2,9 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 const PEN_SIZES = {
-  SMALL: {radius: 5, text: "Small"},
-  MEDIUM: {radius: 10, text: "Medium"},
-  LARGE: {radius: 15, text: "Large"}
+  SMALL: { radius: 5, text: "Small" },
+  MEDIUM: { radius: 10, text: "Medium" },
+  LARGE: { radius: 15, text: "Large" }
 }
 
 class DrawingCanvas extends React.Component {
@@ -26,11 +26,11 @@ class DrawingCanvas extends React.Component {
   };
 
   changePenColor(e) {
-    this.setState({penColor: e.target.value});
+    this.setState({ penColor: e.target.value });
   }
 
   changePenSize(e) {
-    this.setState({penSize: e.target.value});
+    this.setState({ penSize: e.target.value });
   }
 
   toggleDrawing(e) {
@@ -40,7 +40,7 @@ class DrawingCanvas extends React.Component {
   }
 
   draw(click) {
-    if(!this.state.drawing){
+    if (!this.state.drawing) {
       return;
     }
 
@@ -68,22 +68,22 @@ class DrawingCanvas extends React.Component {
     const canvas = this.refs.canvas;
     const drawingData = canvas.toDataURL();
 
-    fetch("/api/drawings", { 
-      method: 'Post', 
-      headers: { "Content-Type": "application/json"},
-      body: JSON.stringify({drawing_base64: drawingData})
+    fetch("/api/drawings", {
+      method: 'Post',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ drawing_base64: drawingData })
     })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      this.setState({toDrawing: data.drawing_id})
-    });
-  };  
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        this.setState({ toDrawing: data.drawing_id })
+      });
+  };
 
   render() {
-    if(this.state.toDrawing) {
-      return <Redirect to={`/drawings/${this.state.toDrawing}`}/>
+    if (this.state.toDrawing) {
+      return <Redirect to={`/drawings/${this.state.toDrawing}`} />
     };
 
     const divStyle = {
@@ -96,19 +96,19 @@ class DrawingCanvas extends React.Component {
 
     return (
       <div className="App" style={divStyle}>
-        <canvas 
-          ref="canvas" 
+        <canvas
+          ref="canvas"
           width={400}
           height={400}
           onMouseDown={this.toggleDrawing}
           onMouseMove={this.draw}
           onMouseUp={this.toggleDrawing}
-          style={canvasStyle} 
+          style={canvasStyle}
         />
-        <input 
-          type="color" 
+        <input
+          type="color"
           value={this.state.penColor}
-          onChange={this.changePenColor}  
+          onChange={this.changePenColor}
         />
         <select onChange={this.changePenSize}>
           <option value={PEN_SIZES.SMALL.radius}>{PEN_SIZES.SMALL.text}</option>
