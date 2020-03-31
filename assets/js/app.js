@@ -18,10 +18,29 @@ import "phoenix_html"
 
 import React from 'react'
 import ReactDOM from 'react-dom';
+import {
+  Link,
+  Route,
+  BrowserRouter as Router,
+  Switch
+ } from 'react-router-dom'
+
+import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import Root from './Root.jsx'
 
 function App() {
-  return <Root />
+  return (
+    <Router>
+      <Switch>
+        <Route path="/drawings/:drawingId">
+          <GuessDrawingPage />
+        </Route>
+        <Route path="/">
+          <Root/>
+        </Route>
+      </Switch>
+    </Router>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));

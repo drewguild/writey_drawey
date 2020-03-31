@@ -5,8 +5,8 @@ defmodule WriteyDraweyWeb.DrawingsController do
 
   alias WriteyDrawey.{Drawing, Repo}
 
-  def show(conn, _) do
-    drawing = Repo.get(Drawing, 4)
+  def show(conn, %{"id" => drawingId}) do
+    drawing = Repo.get(Drawing, drawingId)
       
     render(conn, "show.json", drawing: drawing)
   end

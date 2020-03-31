@@ -1,8 +1,8 @@
 import React from 'react';
-import _ from 'lodash'
+import _ from 'lodash';
 
-import DrawingCanvas from './DrawingCanvas.jsx'
-import Prompt from './Prompt.jsx'
+import DrawingCanvas from './DrawingCanvas.jsx';
+import Prompt from './Prompt.jsx';
 
 
 class Root extends React.Component {
@@ -19,10 +19,6 @@ class Root extends React.Component {
         this.setState({prompt: data.prompt})
       });
   };
-
-  randomWord() {
-    return _.sample(["Not yet"]);
-  }
 
   render() {
     return (

@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 const PEN_SIZES = {
   SMALL: {radius: 5, text: "Small"},
@@ -13,7 +14,8 @@ class DrawingCanvas extends React.Component {
     this.state = {
       drawing: false,
       penColor: "#000000",
-      penSize: PEN_SIZES.SMALL.radius
+      penSize: PEN_SIZES.SMALL.radius,
+      toDrawing: null //for page redirect
     };
 
     this.changePenColor = this.changePenColor.bind(this);
@@ -65,16 +67,25 @@ class DrawingCanvas extends React.Component {
   submitDrawing(e) {
     const canvas = this.refs.canvas;
     const drawingData = canvas.toDataURL();
-    console.log(drawingData);
 
     fetch("/api/drawings", { 
       method: 'Post', 
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({drawing_base64: drawingData})
+    })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      this.setState({toDrawing: data.drawing_id})
     });
   };  
 
   render() {
+    if(this.state.toDrawing) {
+      return <Redirect to={`/drawings/${this.state.toDrawing}`}/>
+    };
+
     const divStyle = {
       backgroundColor: 'grey'
     };
