@@ -1,3 +1,3 @@
-export const timeExpired = () => {
-  console.log("time expired");
-};
+export const timeExpired = () => ({
+  type = 'TIME_EXPIRED'
+});
