@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
+import { timeExpired } from './actions'
 
 class Timer extends React.Component {
   constructor(props) {
@@ -15,21 +18,13 @@ class Timer extends React.Component {
     };
 
     if (this.state.time == 0) {
-      clearInterval(this.timer)
-      this.expire()
+      clearInterval(this.timer);
+      timeExpired();
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.timer)
-  }
-
-  expire() {
-    if (this.props.onExpire) {
-      this.props.onExpire();
-    } else {
-      console.log("Timer expired");
-    };
   }
 
   tick() {
@@ -45,4 +40,10 @@ class Timer extends React.Component {
   };
 }
 
-export default Timer;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    timeExpired: () => dispatch(timeExpired())
+  };
+}
+
+export default connect(mapDispatchToProps)(Timer);
