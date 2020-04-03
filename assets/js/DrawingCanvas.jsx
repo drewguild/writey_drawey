@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { connect } from 'react-redux'
 
 const PEN_SIZES = {
   SMALL: { radius: 5, text: "Small" },
@@ -21,9 +22,21 @@ class DrawingCanvas extends React.Component {
     this.changePenColor = this.changePenColor.bind(this);
     this.changePenSize = this.changePenSize.bind(this);
     this.draw = this.draw.bind(this);
+    this.shouldSubmit = this.shouldSubmit.bind(this);
     this.submitDrawing = this.submitDrawing.bind(this);
     this.toggleDrawing = this.toggleDrawing.bind(this);
   };
+
+  componentDidUpdate() {
+    console.log("updated");
+    if (this.shouldSubmit()) {
+      this.submitDrawing();
+    }
+  }
+
+  shouldSubmit() {
+    return (this.props.shouldSubmit && !this.state.toDrawing);
+  }
 
   changePenColor(e) {
     this.setState({ penColor: e.target.value });
@@ -64,7 +77,7 @@ class DrawingCanvas extends React.Component {
     ctx.closePath();
   };
 
-  submitDrawing(e) {
+  submitDrawing() {
     const canvas = this.refs.canvas;
     const drawingData = canvas.toDataURL();
 
@@ -115,10 +128,15 @@ class DrawingCanvas extends React.Component {
           <option value={PEN_SIZES.MEDIUM.radius}>{PEN_SIZES.MEDIUM.text}</option>
           <option value={PEN_SIZES.LARGE.radius}>{PEN_SIZES.LARGE.text}</option>
         </select>
-        <button onClick={this.submitDrawing} />
       </div>
     );
   };
 };
 
-export default DrawingCanvas;
+const mapState = (state) => {
+  return {
+    shouldSubmit: state.timer.expired
+  }
+}
+
+export default connect(mapState)(DrawingCanvas);
