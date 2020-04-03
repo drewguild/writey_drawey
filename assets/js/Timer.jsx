@@ -19,7 +19,7 @@ class Timer extends React.Component {
 
     if (this.state.time == 0) {
       clearInterval(this.timer);
-      timeExpired();
+      this.props.timeExpired();
     }
   }
 
@@ -40,10 +40,14 @@ class Timer extends React.Component {
   };
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    timeExpired: () => dispatch(timeExpired())
-  };
-}
+const mapStateToProps = (state) => {
+  return { expired: state.timer.expired }
+};
 
-export default connect(mapDispatchToProps)(Timer);
+const mapDispatchToProps = {
+  timeExpired
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps)(Timer);
