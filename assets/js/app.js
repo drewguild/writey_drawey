@@ -16,30 +16,38 @@ import "phoenix_html"
 // Local files can be imported directly using relative paths, for example:
 // import socket from "./socket"
 
-import React from 'react'
+import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   Link,
   Route,
   BrowserRouter as Router,
   Switch
-} from 'react-router-dom'
+} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import rootReducer from './reducers';
 
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import Root from './Root.jsx'
 
 function App() {
+  const store = createStore(rootReducer)
+
   return (
-    <Router>
-      <Switch>
-        <Route path="/drawings/:drawingId">
-          <GuessDrawingPage />
-        </Route>
-        <Route path="/">
-          <Root />
-        </Route>
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <Switch>
+          <Route path="/drawings/:drawingId">
+            <GuessDrawingPage />
+          </Route>
+          <Route path="/">
+            <Root />
+          </Route>
+        </Switch>
+      </Router>
+    </Provider>
   )
 }
 
