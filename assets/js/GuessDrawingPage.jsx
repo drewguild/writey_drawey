@@ -24,6 +24,7 @@ class GuessDrawingPage extends React.Component {
       <div>
         <h2>What do you see?</h2>
         <img src={this.state.imageBinary} />
+        <input type='text' />
       </div>
     )
   }
