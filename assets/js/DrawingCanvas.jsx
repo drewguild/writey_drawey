@@ -28,7 +28,6 @@ class DrawingCanvas extends React.Component {
   };
 
   componentDidUpdate() {
-    console.log("updated");
     if (this.shouldSubmit()) {
       this.submitDrawing();
     }
@@ -84,7 +83,10 @@ class DrawingCanvas extends React.Component {
     fetch("/api/drawings", {
       method: 'Post',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ drawing_base64: drawingData })
+      body: JSON.stringify({
+        drawing_base64: drawingData,
+        prompt_id: this.props.promptId
+      })
     })
       .then((response) => {
         return response.json();
@@ -135,6 +137,7 @@ class DrawingCanvas extends React.Component {
 
 const mapState = (state) => {
   return {
+    promptId: state.prompt.id,
     shouldSubmit: state.timer.expired
   }
 }

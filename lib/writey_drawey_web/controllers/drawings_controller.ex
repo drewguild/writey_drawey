@@ -3,7 +3,7 @@ defmodule WriteyDraweyWeb.DrawingsController do
 
   alias Jason
 
-  alias WriteyDrawey.{Drawing, Repo}
+  alias WriteyDrawey.{Drawing, Prompt, Repo}
 
   def show(conn, %{"id" => drawingId}) do
     drawing = Repo.get(Drawing, drawingId)
@@ -11,12 +11,21 @@ defmodule WriteyDraweyWeb.DrawingsController do
     render(conn, "show.json", drawing: drawing)
   end
 
-  def create(conn, %{"drawing_base64" => drawing}) do
-    Drawing.changeset(%Drawing{}, %{image_binary: drawing})
-      |> Repo.insert
-      |> case do
-        {:ok, drawing} -> json(conn, %{success: true, drawing_id: Map.get(drawing, :id)})
-        {:error, _} -> json(conn, %{success: false})
-      end
+  def create(conn, %{"drawing_base64" => binary, "prompt_id" => prompt_id}) do
+    drawing = create_drawing!(binary)
+    link_drawing!(prompt_id, drawing)
+    json(conn, %{success: true, drawing_id: drawing.id})
+  end
+
+  defp create_drawing!(binary) do
+    Drawing.changeset(%Drawing{}, %{image_binary: binary})
+    |> Repo.insert!
+  end
+
+  # TODO: move to Prompt
+  defp link_drawing!(prompt_id, %{id: drawing_id}) do
+    Repo.get(Prompt, prompt_id)
+    |> Prompt.changeset(%{drawing_id: drawing_id})
+    |> Repo.update!
   end
 end

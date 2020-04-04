@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 class Prompt extends React.Component {
   constructor(props) {
@@ -12,4 +13,8 @@ class Prompt extends React.Component {
   };
 };
 
-export default Prompt
+const mapState = (state) => ({
+  word: state.prompt.text
+});
+
+export default connect(mapState)(Prompt);

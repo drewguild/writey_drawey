@@ -2,6 +2,6 @@ defmodule WriteyDraweyWeb.PromptsView do
   use WriteyDraweyWeb, :view
 
   def render("prompt.json", %{prompt: prompt}) do
-      %{prompt: prompt}
+      %{id: prompt.id, prompt: prompt.text}
   end
 end

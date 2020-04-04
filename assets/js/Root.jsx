@@ -1,5 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+
+import { promptReceived } from './actions';
 
 import DrawingCanvas from './DrawingCanvas.jsx';
 import Prompt from './Prompt.jsx';
@@ -10,35 +13,28 @@ class Root extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { prompt: null };
-
-    this.setSubmitAndRedirect = this.setSubmitAndRedirect.bind(this);
-
     fetch('/api/prompts/random')
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        this.setState({ prompt: data.prompt })
+        this.props.promptReceived(data.id, data.prompt);
       });
-  };
-
-  setSubmitAndRedirect() {
-    this.setState({ submitAndRedirect: true });
   };
 
   render() {
     return (
       <div>
-        <Prompt word={this.state.prompt} />
+        <Prompt />
         <DrawingCanvas />
-        <Timer
-          time={8}
-          onExpire={() => { this.setSubmitAndRedirect }}
-        />
+        <Timer time={5} />
       </div>
     )
   }
 };
 
-export default Root;
+const mapDispatchToProps = {
+  promptReceived
+}
+
+export default connect(null, mapDispatchToProps)(Root);

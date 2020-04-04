@@ -6,17 +6,18 @@ import { timeExpired } from './actions'
 class Timer extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { time: props.time };
 
     this.tick = this.tick.bind(this);
   };
 
-  componentDidUpdate() {
+  componentDidMount() {
     if (!this.timer) {
-      this.timer = setInterval(() => this.tick(), 1000);
-    };
+      this.timer = setInterval(() => this.tick(), 1000)
+    }
+  }
 
+  componentDidUpdate() {
     if (this.state.time == 0) {
       clearInterval(this.timer);
       this.props.timeExpired();
