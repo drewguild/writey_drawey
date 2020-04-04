@@ -1,5 +1,14 @@
 import { combineReducers } from 'redux';
 
+const game = (state = { id: null, code: null }, action) => {
+  switch (action.type) {
+    case 'GAME_RECEIVED':
+      return Object.assign({}, state, { id: action.game_id, code: action.code })
+    default:
+      return state;
+  }
+}
+
 const prompt = (state = { id: null, text: null }, action) => {
   switch (action.type) {
     case 'PROMPT_RECEIVED':
@@ -19,6 +28,7 @@ const timer = (state = { expired: false }, action) => {
 };
 
 const rootReducer = combineReducers({
+  game,
   prompt,
   timer
 });

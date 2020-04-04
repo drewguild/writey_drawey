@@ -28,8 +28,9 @@ import { createStore } from 'redux';
 
 import rootReducer from './reducers';
 
-import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import DrawingPage from './DrawingPage.jsx'
+import GuessDrawingPage from "./GuessDrawingPage.jsx"
+import LandingPage from './LandingPage.jsx'
 
 function App() {
   const store = createStore(rootReducer)
@@ -41,8 +42,11 @@ function App() {
           <Route path="/drawings/:drawingId">
             <GuessDrawingPage />
           </Route>
-          <Route path="/">
+          <Route path="/draw">
             <DrawingPage />
+          </Route>
+          <Route>
+            <LandingPage />
           </Route>
         </Switch>
       </Router>
