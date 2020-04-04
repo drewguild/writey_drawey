@@ -19,7 +19,6 @@ import "phoenix_html"
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  Link,
   Route,
   BrowserRouter as Router,
   Switch
@@ -30,7 +29,7 @@ import { createStore } from 'redux';
 import rootReducer from './reducers';
 
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
-import Root from './Root.jsx'
+import DrawingPage from './DrawingPage.jsx'
 
 function App() {
   const store = createStore(rootReducer)
@@ -43,7 +42,7 @@ function App() {
             <GuessDrawingPage />
           </Route>
           <Route path="/">
-            <Root />
+            <DrawingPage />
           </Route>
         </Switch>
       </Router>

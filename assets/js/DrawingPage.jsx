@@ -9,7 +9,7 @@ import Prompt from './Prompt.jsx';
 import Timer from './Timer.jsx'
 
 
-class Root extends React.Component {
+class DrawingPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -37,4 +37,4 @@ const mapDispatchToProps = {
   promptReceived
 }
 
-export default connect(null, mapDispatchToProps)(Root);
+export default connect(null, mapDispatchToProps)(DrawingPage);
