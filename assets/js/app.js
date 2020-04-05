@@ -31,6 +31,7 @@ import rootReducer from './reducers';
 import DrawingPage from './DrawingPage.jsx'
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import LandingPage from './LandingPage.jsx'
+import LobbyPage from './LobbyPage.jsx'
 
 function App() {
   const store = createStore(rootReducer)
@@ -44,6 +45,9 @@ function App() {
           </Route>
           <Route path="/draw">
             <DrawingPage />
+          </Route>
+          <Route path='/lobby'>
+            <LobbyPage />
           </Route>
           <Route>
             <LandingPage />
