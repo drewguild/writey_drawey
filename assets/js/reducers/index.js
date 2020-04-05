@@ -9,6 +9,15 @@ const game = (state = { id: null, code: null }, action) => {
   }
 }
 
+const player = (state = [], action) => {
+  switch (action.type) {
+    case 'PLAYER_RECEIVED':
+      return [...state, { id: action.player_id, name: action.name }]
+    default:
+      return state;
+  }
+};
+
 const prompt = (state = { id: null, text: null }, action) => {
   switch (action.type) {
     case 'PROMPT_RECEIVED':
@@ -29,6 +38,7 @@ const timer = (state = { expired: false }, action) => {
 
 const rootReducer = combineReducers({
   game,
+  player,
   prompt,
   timer
 });

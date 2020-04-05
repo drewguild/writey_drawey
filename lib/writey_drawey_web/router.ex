@@ -20,6 +20,7 @@ defmodule WriteyDraweyWeb.Router do
     post "/drawings", DrawingsController, :create
 
     post "/games", GamesController, :create
+    get "/games/:id/players", GamesController, :get_players
 
     get "/prompts/random", PromptsController, :random
   end

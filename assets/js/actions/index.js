@@ -5,6 +5,13 @@ export const gameReceived = (id, code) => ({
   code: code
 })
 
+// Player Action Creators
+export const playerReceived = (id, name) => ({
+  type: 'PLAYER_RECEIVED',
+  player_id: id,
+  name: name
+})
+
 // Prompt Action Creators
 export const promptReceived = (id, text) => ({
   type: 'PROMPT_RECEIVED',
