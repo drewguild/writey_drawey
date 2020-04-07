@@ -18,6 +18,18 @@ defmodule WriteyDrawey.Game do
     |> validate_required([:code])
   end
 
+  def add_player(code, player_attrs) do
+    game = get_by_code(code)
+
+    Player.add_to_game(game, player_attrs)
+
+    game
+  end
+
+  def get_by_code(code) do
+    Repo.get_by!(Game, code: code)
+  end
+
   def get_players(id) do 
     Repo.all(from p in Player,
               where: p.game_id == ^id)

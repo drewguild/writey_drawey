@@ -9,9 +9,31 @@ class LandingPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.joinGame = this.joinGame.bind(this);
     this.newGame = this.newGame.bind(this);
+    this.setGameCode = this.setGameCode.bind(this);
     this.setPlayerName = this.setPlayerName.bind(this);
   };
+
+  joinGame() {
+    if (!this.state.gameCode || !this.state.playerName) {
+      return
+    }
+
+    fetch(`/api/games/${this.state.gameCode}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        player_name: this.state.playerName
+      })
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.props.gameReceived(data.game_id, data.game_code)
+      })
+  }
 
   newGame() {
     if (!this.state.playerName) {
@@ -33,6 +55,10 @@ class LandingPage extends React.Component {
       })
   };
 
+  setGameCode(e) {
+    this.setState({ gameCode: e.target.value })
+  }
+
   setPlayerName(e) {
     this.setState({ playerName: e.target.value })
   }
@@ -44,12 +70,14 @@ class LandingPage extends React.Component {
 
     return (
       <div>
-        <form>
-          <input placeholder="Enter game ID" />
-          <button type="submit" >Join</button>
-        </form>
-        <input placeholder="Enter a (nick)name" onChange={this.setPlayerName} />
-        <button onClick={this.newGame}>New Game</button>
+        <div>
+          <input placeholder="Enter game ID" onChange={this.setGameCode} />
+          <button onClick={this.joinGame}>Join</button>
+        </div>
+        <div>
+          <input placeholder="Enter a (nick)name" onChange={this.setPlayerName} />
+          <button onClick={this.newGame}>New Game</button>
+        </div>
       </div >
     )
   };
