@@ -1,16 +1,19 @@
 defmodule WriteyDraweyWeb.GamesController do
   use WriteyDraweyWeb, :controller
 
-  # TODO: implement
-  def create(conn, _params) do
-    json(conn, %{game_id: 1, game_code: "3x6y9z"})
+  alias WriteyDrawey.{Game}
+
+  def create(conn, %{"initial_player_name" => initial_player_name}) do
+    game = Game.initialize_with_player(initial_player_name)
+
+    json(conn, %{game_id: game.id, game_code: game.code})
   end
 
   # TODO: implement
-  def get_players(conn, _params) do
-    json(conn,[
-      %{id: 1, name: "Drew", avatar: nil},
-      %{id: 2, name: "Roji", avatar: nil}
-    ])
+  def get_players(conn, %{"id" => id}) do
+    player_data = Game.get_players(id)
+    |> Enum.map(&(%{id: &1.id, name: &1.name, avatar: nil}))
+
+    json(conn, player_data)
   end
 end
