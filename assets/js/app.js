@@ -27,6 +27,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
 import rootReducer from './reducers';
+import { loadState, saveState } from './localStorage'
 
 import DrawingPage from './DrawingPage.jsx'
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
@@ -34,7 +35,17 @@ import LandingPage from './LandingPage.jsx'
 import LobbyPage from './LobbyPage.jsx'
 
 function App() {
-  const store = createStore(rootReducer)
+  const persistedState = loadState();
+  console.log("state:")
+  console.log(persistedState)
+  const store = createStore(
+    rootReducer,
+    persistedState
+  )
+
+  store.subscribe(() => {
+    saveState(store.getState());
+  })
 
   return (
     <Provider store={store}>

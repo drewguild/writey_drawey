@@ -9,7 +9,12 @@ class PlayerListItem extends React.Component {
 
   render() {
     return (
-      <li>{this.props.name}</li>
+      <li>
+        <span>{this.props.name}</span>
+        <span>
+          <button>Ready?</button>
+        </span>
+      </li>
     )
   }
 };
