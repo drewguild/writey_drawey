@@ -9,10 +9,19 @@ const game = (state = { id: null, code: null }, action) => {
   }
 }
 
-const player = (state = [], action) => {
+const player = (state = { ids: [], players: [] }, action) => {
   switch (action.type) {
     case 'PLAYER_RECEIVED':
-      return [...state, { id: action.player_id, name: action.name }]
+      if (_.includes(state.ids, action.player_id)) {
+        return state
+      }
+      return {
+        ids: [...state.ids, action.player_id],
+        players: [
+          ...state.players,
+          { id: action.player_id, name: action.name }
+        ]
+      }
     default:
       return state;
   }

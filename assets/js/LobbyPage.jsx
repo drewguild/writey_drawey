@@ -5,10 +5,23 @@ import { playerReceived } from './actions'
 import PlayerList from './PlayerList.jsx';
 
 class LobbyPage extends React.Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props)
+    this.fetchPlayers = this.fetchPlayers.bind(this)
+  }
 
-    // TODO: this will need to do polling/sockets
-    // AND will need to clear players who have dropped (less urgent)
+  componentDidMount() {
+    this.fetchPlayers()
+    this.timer = setInterval(() => this.fetchPlayers(), 3000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+    this.timer = null
+  }
+
+  fetchPlayers() {
+    // TODO: will need to clear players who have dropped (less urgent)
     fetch(`/api/games/${this.props.gameId}/players`)
       .then((response) => {
         return response.json()

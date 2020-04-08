@@ -24,7 +24,7 @@ class PlayerList extends React.Component {
 }
 
 const mapState = (state) => ({
-  players: state.player
+  players: state.player.players
 })
 
 export default connect(mapState)(PlayerList);
