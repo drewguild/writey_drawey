@@ -1,14 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+import { playerReceived } from './actions'
 
 class PlayerListItem extends React.Component {
   constructor(props) {
     super(props)
+
+    this.readyPlayer = this.readyPlayer.bind(this)
   }
 
   readyPlayer() {
-    // TODO: fill in
+    fetch(`/api/players/${this.props.id}`, {
+      method: "put",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        status: 'READY'
+      })
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.props.playerReceived(data)
+      })
   }
 
   render() {
@@ -37,12 +52,15 @@ class PlayerListItem extends React.Component {
 const mapState = (state, ownProps) => {
   const player = _.find(state.player.players, (player) => { return player.name == ownProps.name })
 
-  console.log(state.player.currentPlayer)
   return {
     enoughPlayers: state.player.players.length > 3,
     isCurrentPlayer: state.player.currentPlayer == ownProps.id,
-    isPlayerReady: player.ready
+    isPlayerReady: player.status == 'READY'
   }
 };
 
-export default connect(mapState)(PlayerListItem)
+const mapDispatch = {
+  playerReceived
+}
+
+export default connect(mapState, mapDispatch)(PlayerListItem)

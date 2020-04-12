@@ -11,10 +11,18 @@ export const currentPlayerSet = (id) => ({
   player_id: id
 });
 
-export const playerReceived = (id, name) => ({
+export const playerReceived = ({ id, name, status }) => ({
   type: 'PLAYER_RECEIVED',
   player_id: id,
-  name: name
+  name: name,
+  status: status
+})
+
+export const playerUpdated = ({ id, name, status }) => ({
+  type: 'PLAYER_UPDATED',
+  player_id: id,
+  name: name,
+  status, status
 })
 
 // Prompt Action Creators

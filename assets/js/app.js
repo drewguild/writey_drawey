@@ -36,8 +36,6 @@ import LobbyPage from './LobbyPage.jsx'
 
 function App() {
   const persistedState = loadState();
-  console.log("state:")
-  console.log(persistedState)
   const store = createStore(
     rootReducer,
     persistedState

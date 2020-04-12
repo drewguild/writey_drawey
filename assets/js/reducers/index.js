@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import _ from 'lodash';
 
 const game = (state = { id: null, code: null }, action) => {
   switch (action.type) {
@@ -15,16 +16,42 @@ const player = (state = { currentPlayer: null, ids: [], players: [] }, action) =
       return Object.assign({}, state, { currentPlayer: action.player_id })
     case 'PLAYER_RECEIVED':
       if (_.includes(state.ids, action.player_id)) {
-        return state
+        return Object.assign(
+          {},
+          state,
+          {
+            players: _.map(state.players, (player) => {
+              if (player.id !== action.player_id) {
+                return player
+              }
+
+              return { id: action.player_id, name: action.name, status: action.status }
+            })
+          }
+        )
       }
       return {
         currentPlayer: state.currentPlayer,
         ids: [...state.ids, action.player_id],
         players: [
           ...state.players,
-          { id: action.player_id, name: action.name }
+          { id: action.player_id, name: action.name, status: action.status }
         ]
       }
+    case 'PLAYER_UPDATED':
+      return Object.assign(
+        {},
+        state,
+        {
+          players: _.map(state.players, (player) => {
+            if (player.id !== action.player_id) {
+              return player
+            }
+
+            return { id: action.player_id, name: action.name, status: action.status }
+          })
+        }
+      )
     default:
       return state;
   }

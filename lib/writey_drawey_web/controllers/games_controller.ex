@@ -24,9 +24,9 @@ defmodule WriteyDraweyWeb.GamesController do
   end
 
   def get_players(conn, %{"id" => id}) do
-    player_data = Game.get_players(id)
-    |> Enum.map(&(%{id: &1.id, name: &1.name, avatar: nil}))
+    players = Game.get_players(id)
+    # |> Enum.map(&(%{id: &1.id, name: &1.name, avatar: nil}))
 
-    json(conn, player_data)
+    render(conn, "players.json", %{players: players})
   end
 end
