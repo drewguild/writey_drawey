@@ -6,6 +6,11 @@ export const gameReceived = (id, code) => ({
 })
 
 // Player Action Creators
+export const currentPlayerSet = (id) => ({
+  type: 'CURRENT_PLAYER_SET',
+  player_id: id
+});
+
 export const playerReceived = (id, name) => ({
   type: 'PLAYER_RECEIVED',
   player_id: id,

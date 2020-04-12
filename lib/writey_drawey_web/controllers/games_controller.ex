@@ -6,13 +6,21 @@ defmodule WriteyDraweyWeb.GamesController do
   def create(conn, %{"initial_player_name" => initial_player_name}) do
     game = Game.initialize_with_player(initial_player_name)
 
-    json(conn, %{game_id: game.id, game_code: game.code})
+    json(conn, %{
+      game_id: game.id, 
+      game_code: game.code,
+      players: Enum.map(game.players, &(&1.id))
+    })
   end
 
   def add_player(conn, %{"code" => code, "player_name" => player_name}) do
     game = Game.add_player(code, %{name: player_name})
 
-    json(conn, %{game_id: game.id, game_code: game.code})
+    json(conn, %{
+      game_id: game.id, 
+      game_code: game.code,
+      players: Enum.map(game.players, &(&1.id)) 
+    })
   end
 
   def get_players(conn, %{"id" => id}) do

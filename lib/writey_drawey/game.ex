@@ -7,6 +7,7 @@ defmodule WriteyDrawey.Game do
 
   schema "games" do
     field :code, :string
+    has_many :players, Player
 
     timestamps()
   end
@@ -18,12 +19,13 @@ defmodule WriteyDrawey.Game do
     |> validate_required([:code])
   end
 
-  def add_player(code, player_attrs) do
-    game = get_by_code(code)
-
-    Player.add_to_game(game, player_attrs)
+  def add_player(code, %{name: name}) do
+    game = get_by_code(code) |> Repo.preload(:players)
 
     game
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:players, [%Player{name: name} | game.players ])
+    |> Repo.update!
   end
 
   def get_by_code(code) do
@@ -36,12 +38,9 @@ defmodule WriteyDrawey.Game do
   end
 
   def initialize_with_player(name) do
-    game = changeset(%Game{}, %{code: random_code})
+    changeset(%Game{}, %{code: random_code, })
+    |> Ecto.Changeset.put_assoc(:players, [%Player{name: name}])
     |> Repo.insert!
-    
-    Player.add_to_game(game, %{name: name})
-
-    game
   end
 
   defp random_code do

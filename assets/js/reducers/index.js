@@ -9,13 +9,16 @@ const game = (state = { id: null, code: null }, action) => {
   }
 }
 
-const player = (state = { ids: [], players: [] }, action) => {
+const player = (state = { currentPlayer: null, ids: [], players: [] }, action) => {
   switch (action.type) {
+    case 'CURRENT_PLAYER_SET':
+      return Object.assign({}, state, { currentPlayer: action.player_id })
     case 'PLAYER_RECEIVED':
       if (_.includes(state.ids, action.player_id)) {
         return state
       }
       return {
+        currentPlayer: state.currentPlayer,
         ids: [...state.ids, action.player_id],
         players: [
           ...state.players,

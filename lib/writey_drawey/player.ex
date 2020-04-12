@@ -6,7 +6,7 @@ defmodule WriteyDrawey.Player do
 
   schema "players" do
     field :name, :string
-    field :game_id, :id
+    belongs_to :game, Game
 
     timestamps()
   end

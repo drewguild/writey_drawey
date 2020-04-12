@@ -7,16 +7,42 @@ class PlayerListItem extends React.Component {
     super(props)
   }
 
+  readyPlayer() {
+    // TODO: fill in
+  }
+
   render() {
+    let button;
+    if (this.props.enoughPlayers) {
+      if (this.props.isPlayerReady) {
+        button = <button disabled={true}>Good to go!</button>
+      } else if (this.props.isCurrentPlayer) {
+        button = <button onClick={this.readyPlayer}>Ready?</button>
+      } else {
+        button = <button disabled={true}>Ready?</button>
+      }
+    } else {
+      button = <button disabled={true}>Waiting for players</button>
+    }
+
     return (
       <li>
         <span>{this.props.name}</span>
-        <span>
-          <button>Ready?</button>
-        </span>
+        <span>{button}</span>
       </li>
     )
   }
 };
 
-export default connect(null)(PlayerListItem)
+const mapState = (state, ownProps) => {
+  const player = _.find(state.player.players, (player) => { return player.name == ownProps.name })
+
+  console.log(state.player.currentPlayer)
+  return {
+    enoughPlayers: state.player.players.length > 3,
+    isCurrentPlayer: state.player.currentPlayer == ownProps.id,
+    isPlayerReady: player.ready
+  }
+};
+
+export default connect(mapState)(PlayerListItem)

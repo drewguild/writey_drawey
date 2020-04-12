@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash';
 
-import { gameReceived } from './actions'
+import { currentPlayerSet, gameReceived } from './actions'
 import { Redirect } from 'react-router-dom';
 
 class LandingPage extends React.Component {
@@ -31,6 +31,7 @@ class LandingPage extends React.Component {
         return response.json()
       })
       .then((data) => {
+        this.props.currentPlayerSet(data.players[0])
         this.props.gameReceived(data.game_id, data.game_code)
       })
   }
@@ -51,6 +52,7 @@ class LandingPage extends React.Component {
         return response.json();
       })
       .then((data) => {
+        this.props.currentPlayerSet(data.players[0])
         this.props.gameReceived(data.game_id, data.game_code)
       })
   };
@@ -88,6 +90,7 @@ const mapState = (state) => ({
 })
 
 const mapDispatch = {
+  currentPlayerSet,
   gameReceived
 }
 
