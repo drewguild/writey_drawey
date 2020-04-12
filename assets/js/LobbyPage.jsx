@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { playerReceived } from './actions'
 import PlayerList from './PlayerList.jsx';
 import Timer from './Timer.jsx'
+import { Redirect } from 'react-router-dom';
 
 class LobbyPage extends React.Component {
   constructor(props) {
@@ -37,6 +38,10 @@ class LobbyPage extends React.Component {
   render() {
     const timer = this.props.allPlayersReady ? <Timer time={5} /> : null
 
+    if (this.props.shouldBeginGame) {
+      return <Redirect to={"/draw"} />
+    }
+
     return (
       <div>
         <h2>Game code is: {this.props.gameCode}</h2>
@@ -50,6 +55,7 @@ class LobbyPage extends React.Component {
 
 const mapState = (state) => ({
   allPlayersReady: _.every(state.player.players, (player) => { return player.status == 'READY' }),
+  shouldBeginGame: state.timer.expired,
   gameId: state.game.id,
   gameCode: state.game.code
 })

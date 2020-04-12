@@ -36,3 +36,7 @@ export const promptReceived = (id, text) => ({
 export const timeExpired = () => ({
   type: 'TIME_EXPIRED'
 });
+
+export const timerRemoved = () => ({
+  type: 'TIMER_REMOVED'
+})

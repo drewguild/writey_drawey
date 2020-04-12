@@ -70,6 +70,8 @@ const timer = (state = { expired: false }, action) => {
   switch (action.type) {
     case 'TIME_EXPIRED':
       return Object.assign({}, state, { expired: true });
+    case 'TIMER_REMOVED':
+      return Object.assign({}, state, { expired: false })
     default:
       return state;
   }

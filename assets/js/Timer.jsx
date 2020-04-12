@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { timeExpired } from './actions'
+import { timeExpired, timerRemoved } from './actions'
 
 class Timer extends React.Component {
   constructor(props) {
@@ -25,6 +25,7 @@ class Timer extends React.Component {
   }
 
   componentWillUnmount() {
+    this.props.timerRemoved();
     clearInterval(this.timer)
   }
 
@@ -46,7 +47,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  timeExpired
+  timeExpired,
+  timerRemoved
 };
 
 export default connect(
