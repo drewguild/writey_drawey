@@ -1,16 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux'
 
 class GuessDrawingPage extends React.Component {
   constructor(props) {
     super(props)
 
-    // TODO: two issues: 1) janky line, 2) should this component know the expected url structure?
-    this.state = {
-      drawingId: window.location.pathname.split("/").reverse()[0],
-      imageBinary: null
-    }
-
-    fetch(`/api/drawings/${this.state.drawingId}`)
+    fetch(`/api/drawings/next?player_id=${this.props.currentPlayer}`)
       .then((response) => {
         return response.json();
       })
@@ -30,4 +25,8 @@ class GuessDrawingPage extends React.Component {
   }
 }
 
-export default GuessDrawingPage;
+const mapState = (state) => ({
+  currentPlayer: state.player.currentPlayer
+})
+
+export default connect(mapState)(GuessDrawingPage);

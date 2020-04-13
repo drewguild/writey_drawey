@@ -16,12 +16,14 @@ defmodule WriteyDraweyWeb.Router do
   scope "/api", WriteyDraweyWeb do
     pipe_through :api
 
+    get "/drawings/next", DrawingsController, :next
     get "/drawings/:id", DrawingsController, :show
     post "/drawings", DrawingsController, :create
 
     post "/games", GamesController, :create
     put "/games/:code", GamesController, :add_player
     get "/games/:id/players", GamesController, :get_players
+    get "/games/:id/rounds", GamesController, :next_round
 
     put "/players/:id", PlayersController, :update
 

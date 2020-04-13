@@ -34,7 +34,8 @@ defmodule WriteyDrawey.Game do
 
   def get_players(id) do 
     Repo.all(from p in Player,
-              where: p.game_id == ^id)
+              where: p.game_id == ^id,
+              order_by: p.id)
   end
 
   def initialize_with_player(name) do

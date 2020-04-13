@@ -49,7 +49,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <Switch>
-          <Route path="/drawings/:drawingId">
+          <Route path="/guess">
             <GuessDrawingPage />
           </Route>
           <Route path="/draw">

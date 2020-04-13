@@ -5,6 +5,11 @@ export const gameReceived = (id, code) => ({
   code: code
 })
 
+export const roundChanged = (ordinality) => ({
+  type: 'ROUND_CHANGED',
+  ordinality: ordinality
+})
+
 // Player Action Creators
 export const currentPlayerSet = (id) => ({
   type: 'CURRENT_PLAYER_SET',
@@ -31,6 +36,7 @@ export const promptReceived = (id, text) => ({
   prompt_id: id,
   text: text
 });
+
 
 // Timer Action Creators
 export const timeExpired = () => ({

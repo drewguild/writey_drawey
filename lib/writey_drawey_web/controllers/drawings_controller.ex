@@ -16,4 +16,12 @@ defmodule WriteyDraweyWeb.DrawingsController do
     Prompt.link_drawing!(prompt_id, drawing)
     json(conn, %{success: true, drawing_id: drawing.id})
   end
+
+  def next(conn, %{"player_id" => player_id}) do
+    # players = Game.get_players |> map(.id)
+    # drawings = Game.get_last_round |> rotate
+    # Enum.zip(players, drawing) |> Enum.into(%{}) |> Map.get(player_id)
+
+    json(conn, %{success: true})
+  end
 end

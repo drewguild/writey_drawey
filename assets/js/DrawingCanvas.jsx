@@ -92,13 +92,14 @@ class DrawingCanvas extends React.Component {
         return response.json();
       })
       .then((data) => {
+        // TODO: this doesn't need to be an id anymore (just truthy)
         this.setState({ toDrawing: data.drawing_id })
       });
   };
 
   render() {
     if (this.state.toDrawing) {
-      return <Redirect to={`/drawings/${this.state.toDrawing}`} />
+      return <Redirect to={`/guess`} />
     };
 
     const divStyle = {

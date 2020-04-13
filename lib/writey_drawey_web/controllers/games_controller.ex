@@ -1,7 +1,7 @@
 defmodule WriteyDraweyWeb.GamesController do
   use WriteyDraweyWeb, :controller
 
-  alias WriteyDrawey.{Game}
+  alias WriteyDrawey.{Game, Round}
 
   def create(conn, %{"initial_player_name" => initial_player_name}) do
     game = Game.initialize_with_player(initial_player_name)
@@ -23,6 +23,12 @@ defmodule WriteyDraweyWeb.GamesController do
     })
   end
 
+  def next_round(conn, %{"id" => id}) do
+    round = Round.find_or_create(%{game_id: id, ordinality: 1})
+
+    json(conn, %{round_id: round.id, ordinality: round.ordinality})
+  end
+  
   def get_players(conn, %{"id" => id}) do
     players = Game.get_players(id)
     # |> Enum.map(&(%{id: &1.id, name: &1.name, avatar: nil}))
