@@ -2,6 +2,8 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux'
 
+import { roundChanged } from './actions'
+
 const PEN_SIZES = {
   SMALL: { radius: 5, text: "Small" },
   MEDIUM: { radius: 10, text: "Medium" },
@@ -21,13 +23,18 @@ class DrawingCanvas extends React.Component {
 
     this.changePenColor = this.changePenColor.bind(this);
     this.changePenSize = this.changePenSize.bind(this);
+    this.advanceRound = this.advanceRound.bind(this);
     this.draw = this.draw.bind(this);
     this.shouldSubmit = this.shouldSubmit.bind(this);
     this.submitDrawing = this.submitDrawing.bind(this);
     this.toggleDrawing = this.toggleDrawing.bind(this);
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.round && prevProps.round != this.props.round) {
+      this.setState({ toDrawing: true })
+    }
+
     if (this.shouldSubmit()) {
       this.submitDrawing();
     }
@@ -76,6 +83,17 @@ class DrawingCanvas extends React.Component {
     ctx.closePath();
   };
 
+  // TODO: this duplicates logic from LobbyPage
+  advanceRound() {
+    fetch(`/api/games/${this.props.gameId}/rounds?current_round=${this.props.round}`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.props.roundChanged(data.ordinality)
+      })
+  }
+
   submitDrawing() {
     const canvas = this.refs.canvas;
     const drawingData = canvas.toDataURL();
@@ -85,15 +103,17 @@ class DrawingCanvas extends React.Component {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         drawing_base64: drawingData,
-        prompt_id: this.props.promptId
+        game_id: this.props.gameId,
+        prompt_id: this.props.promptId,
+        round: this.props.round
       })
     })
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        // TODO: this doesn't need to be an id anymore (just truthy)
-        this.setState({ toDrawing: data.drawing_id })
+        this.advanceRound();
+
       });
   };
 
@@ -138,9 +158,15 @@ class DrawingCanvas extends React.Component {
 
 const mapState = (state) => {
   return {
+    gameId: state.game.id,
     promptId: state.prompt.id,
+    round: state.game.round,
     shouldSubmit: state.timer.expired
   }
 }
 
-export default connect(mapState)(DrawingCanvas);
+const mapDispatch = {
+  roundChanged
+}
+
+export default connect(mapState, mapDispatch)(DrawingCanvas);

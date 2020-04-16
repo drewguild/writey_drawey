@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import _ from 'lodash';
 
 const game = (state = { id: null, code: null, round: null }, action) => {
-  console.log(action)
   switch (action.type) {
     case 'GAME_RECEIVED':
       return Object.assign({}, state, { ...state, id: action.game_id, code: action.code })

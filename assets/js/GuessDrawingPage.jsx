@@ -5,7 +5,11 @@ class GuessDrawingPage extends React.Component {
   constructor(props) {
     super(props)
 
-    fetch(`/api/drawings/next?player_id=${this.props.currentPlayer}`)
+    this.state = {
+      imageBinary: null
+    }
+
+    fetch(`/api/drawings/next?player_id=${this.props.currentPlayer}&round=${this.props.round - 1}`)
       .then((response) => {
         return response.json();
       })
@@ -26,7 +30,8 @@ class GuessDrawingPage extends React.Component {
 }
 
 const mapState = (state) => ({
-  currentPlayer: state.player.currentPlayer
+  currentPlayer: state.player.currentPlayer,
+  round: state.game.round
 })
 
 export default connect(mapState)(GuessDrawingPage);

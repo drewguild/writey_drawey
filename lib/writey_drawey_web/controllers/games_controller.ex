@@ -23,6 +23,12 @@ defmodule WriteyDraweyWeb.GamesController do
     })
   end
 
+  def next_round(conn, %{"id" => id, "current_round" => current_round }) do
+    round = Round.find_or_create(%{game_id: id, ordinality: String.to_integer(current_round) + 1})
+
+    json(conn, %{round_id: round.id, ordinality: round.ordinality})
+  end
+
   def next_round(conn, %{"id" => id}) do
     round = Round.find_or_create(%{game_id: id, ordinality: 1})
 

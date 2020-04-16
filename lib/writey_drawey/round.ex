@@ -3,11 +3,12 @@ defmodule WriteyDrawey.Round do
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  alias WriteyDrawey.{Round, Repo}
+  alias WriteyDrawey.{Drawing, Round, Repo}
 
   schema "rounds" do
     field :ordinality, :integer
     belongs_to :game, Game
+    has_many :drawings, Drawing
 
     timestamps()
   end
@@ -18,6 +19,13 @@ defmodule WriteyDrawey.Round do
     |> cast(attrs, [:game_id, :ordinality])
     |> unique_constraint(:ordinality, name: :rounds_ordinality_gamed_id_index)
     |> validate_required([:game_id, :ordinality])
+  end
+
+  def find!(game_id, ordinality) do
+    Repo.one!(from r in Round, 
+      where: r.game_id == ^game_id, 
+      where: r.ordinality == ^ordinality
+    )
   end
 
   def find_or_create(attrs) do
