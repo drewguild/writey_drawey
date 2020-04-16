@@ -18,6 +18,7 @@ class DrawingCanvas extends React.Component {
       drawing: false,
       penColor: "#000000",
       penSize: PEN_SIZES.SMALL.radius,
+      hasSubmitted: false,
       toDrawing: null //for page redirect
     };
 
@@ -41,7 +42,7 @@ class DrawingCanvas extends React.Component {
   }
 
   shouldSubmit() {
-    return (this.props.shouldSubmit && !this.state.toDrawing);
+    return (this.props.shouldSubmit && !this.state.hasSubmitted);
   }
 
   changePenColor(e) {
@@ -112,8 +113,8 @@ class DrawingCanvas extends React.Component {
         return response.json();
       })
       .then((data) => {
+        this.setState({ hasSubmitted: true })
         this.advanceRound();
-
       });
   };
 
