@@ -12,6 +12,8 @@ class Timer extends React.Component {
   };
 
   componentDidMount() {
+    // TODO timerRemoved should be renamed since it is being used here upon creation to set state 
+    this.props.timerRemoved()
     if (!this.timer) {
       this.timer = setInterval(() => this.tick(), 1000)
     }

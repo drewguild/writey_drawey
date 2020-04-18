@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
 
+import Timer from './Timer.jsx'
+
 class GuessDrawingPage extends React.Component {
   constructor(props) {
     super(props)
@@ -8,6 +10,8 @@ class GuessDrawingPage extends React.Component {
     this.state = {
       imageBinary: null
     }
+
+    this.setGuess = this.setGuess.bind(this)
   }
 
   componentDidMount() {
@@ -19,6 +23,10 @@ class GuessDrawingPage extends React.Component {
     if (this.state.imageBinary) {
       clearInterval(this.timer)
       this.timer = null
+    }
+
+    if (this.props.shouldSubmit) {
+      this.submitGuess()
     }
   }
 
@@ -37,12 +45,30 @@ class GuessDrawingPage extends React.Component {
       })
   }
 
+  setGuess(e) {
+    this.setState({ guess: e.target.value })
+  }
+
+  submitGuess() {
+    fetch("/api/prompts", {
+      method: "Post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: this.state.guess,
+        game_id: this.props.gameId,
+        player_id: this.props.currentPlayer,
+        round: this.props.round
+      })
+    })
+  }
+
   render() {
     return (
       <div>
         <h2>What do you see?</h2>
         <img src={this.state.imageBinary} />
-        <input type='text' />
+        <input type='text' placeholder="Make a guess" onChange={this.setGuess} />
+        <Timer time={10} />
       </div>
     )
   }
@@ -50,7 +76,9 @@ class GuessDrawingPage extends React.Component {
 
 const mapState = (state) => ({
   currentPlayer: state.player.currentPlayer,
-  round: state.game.round
+  gameId: state.game.id,
+  round: state.game.round,
+  shouldSubmit: state.timer.expired
 })
 
 export default connect(mapState)(GuessDrawingPage);

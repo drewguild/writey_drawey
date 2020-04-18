@@ -28,6 +28,7 @@ defmodule WriteyDraweyWeb.Router do
     put "/players/:id", PlayersController, :update
 
     get "/prompts/random", PromptsController, :random
+    post "/prompts", PromptsController, :create
   end
 
   scope "/", WriteyDraweyWeb do

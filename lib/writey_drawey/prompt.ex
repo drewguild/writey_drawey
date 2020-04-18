@@ -5,7 +5,10 @@ defmodule WriteyDrawey.Prompt do
   alias WriteyDrawey.{Drawing, Prompt, Repo}
 
   schema "prompts" do
+    # TODO remove the drawing/prompt relationship
     belongs_to :drawing, Drawing
+    belongs_to :player, Player
+    belongs_to :round, Round
     field :text, :string
 
     timestamps()
@@ -14,12 +17,17 @@ defmodule WriteyDrawey.Prompt do
   @doc false
   def changeset(prompt, attrs) do
     prompt
-    |> cast(attrs, [:text, :drawing_id])
+    |> cast(attrs, [:text, :drawing_id, :player_id, :round_id])
     |> validate_required([:text])
   end
 
   def generate! do
     changeset(%WriteyDrawey.Prompt{}, %{text: random})
+    |> Repo.insert!
+  end
+
+  def create_prompt!(attrs) do
+    changeset(%Prompt{}, attrs)
     |> Repo.insert!
   end
 
