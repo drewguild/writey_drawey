@@ -24,6 +24,7 @@ defmodule WriteyDraweyWeb.Router do
     put "/games/:code", GamesController, :add_player
     get "/games/:id/players", GamesController, :get_players
     get "/games/:id/rounds", GamesController, :next_round
+    get "/games/:id/rounds/complete", GamesController, :check_round
 
     put "/players/:id", PlayersController, :update
 

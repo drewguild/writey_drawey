@@ -44,7 +44,7 @@ defmodule WriteyDrawey.Game do
     |> Repo.insert!
   end
 
-  def round_complete?(id, ordinality) do
+  def round_complete(id, ordinality) do
     number_of_players = get_players(id)
     |> Enum.count 
 

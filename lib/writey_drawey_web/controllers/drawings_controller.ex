@@ -38,7 +38,7 @@ defmodule WriteyDraweyWeb.DrawingsController do
 
     drawing = Enum.zip(players, drawings) |> Enum.into(%{}) |> Map.get(player_id)
 
-    json(conn, %{success: true, image_binary: drawing.image_binary})
+    json(conn, %{image_binary: drawing.image_binary})
   end
 
   defp rotate([head | tail]) do

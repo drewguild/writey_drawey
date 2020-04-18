@@ -44,7 +44,7 @@ defmodule WriteyDrawey.Round do
     end
   end
 
-  def get_submissions(%Round{} = round) do
+  def get_submissions(round) do
     drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id)
     prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id)
 

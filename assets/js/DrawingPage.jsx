@@ -13,19 +13,55 @@ class DrawingPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchRandomPrompt = this.fetchRandomPrompt.bind(this)
+    this.state = {
+      waiting: true
+    }
   };
 
   componentDidMount() {
+    this.checkRound()
+    this.checkRoundTimer = setInterval(() => this.checkRound(), 1000)
+  }
+
+  componentDidUpdate() {
+    if (!this.state.waiting) {
+      clearInterval(this.checkRoundTimer)
+      this.checkRoundTimer = null
+
+      if (!this.props.hasPrompt) {
+        this.fetchPrompt()
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.checkRoundTimer)
+    this.checkRoundTimer = null
+    this.props.promptExpired()
+  }
+
+  checkRound() {
+    if (this.props.isFirstRound) {
+      this.setState({ waiting: false })
+      return
+    }
+
+    fetch(`api/games/${this.props.gameId}/rounds/complete?round=${this.props.round - 1}`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        this.setState({ waiting: !data.complete })
+      })
+  }
+
+  fetchPrompt() {
     if (this.props.isFirstRound) {
       this.fetchRandomPrompt()
     } else {
       this.fetchNextPrompt()
     }
-  }
-
-  componentWillUnmount() {
-    this.props.promptExpired()
   }
 
   fetchNextPrompt() {
@@ -49,11 +85,15 @@ class DrawingPage extends React.Component {
   }
 
   render() {
+    if (this.state.waiting) {
+      return <h2>One moment...</h2>
+    }
+
     return (
       <div>
         <Prompt />
         <DrawingCanvas />
-        <Timer time={60} />
+        <Timer time={10} />
       </div>
     )
   }
@@ -66,7 +106,9 @@ const mapDispatchToProps = {
 
 const mapState = (state) => ({
   currentPlayer: state.player.currentPlayer,
+  gameId: state.game.id,
   isFirstRound: state.game.round == 1,
+  hasPrompt: state.prompt.id,
   round: state.game.round
 })
 

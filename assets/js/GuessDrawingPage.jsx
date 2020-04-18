@@ -10,7 +10,8 @@ class GuessDrawingPage extends React.Component {
     super(props)
 
     this.state = {
-      imageBinary: null
+      imageBinary: null,
+      waiting: true
     }
 
     this.setGuess = this.setGuess.bind(this)
@@ -27,9 +28,20 @@ class GuessDrawingPage extends React.Component {
       })
   }
 
+  checkRound() {
+    fetch(`api/games/${this.props.gameId}/rounds/complete?round=${this.props.round - 1}`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        console.log(data)
+        this.setState({ waiting: !data.complete })
+      })
+  }
+
   componentDidMount() {
-    this.fetchDrawing();
-    this.timer = setInterval(() => this.fetchDrawing(), 100)
+    this.checkRound()
+    this.checkRoundTimer = setInterval(() => this.checkRound(), 200)
   }
 
   componentDidUpdate(prevProps) {
@@ -37,19 +49,18 @@ class GuessDrawingPage extends React.Component {
       this.setState({ toNextRound: true })
     }
 
-    if (this.state.imageBinary) {
-      clearInterval(this.timer)
-      this.timer = null
+    if (!this.state.waiting) {
+      clearInterval(this.checkRoundTimer)
+      this.checkRoundTimer = null
+
+      if (!this.state.imageBinary) {
+        this.fetchDrawing();
+      }
     }
 
     if (this.shouldSubmit()) {
       this.submitGuess()
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timer)
-    this.timer = null
   }
 
   fetchDrawing() {
@@ -95,12 +106,16 @@ class GuessDrawingPage extends React.Component {
       return <Redirect to="/draw" />
     }
 
+    if (this.state.waiting) {
+      return <h2>One moment...</h2>
+    }
+
     return (
       <div>
         <h2>What do you see?</h2>
         <img src={this.state.imageBinary} />
         <input type='text' placeholder="Make a guess" onChange={this.setGuess} />
-        <Timer time={15} />
+        <Timer time={10} />
       </div>
     )
   }
