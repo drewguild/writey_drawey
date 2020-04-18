@@ -13,6 +13,14 @@ class DrawingPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.fetchRandomPrompt = this.fetchRandomPrompt.bind(this)
+  };
+
+  componentDidMount() {
+    this.fetchRandomPrompt()
+  }
+
+  fetchRandomPrompt() {
     fetch('/api/prompts/random')
       .then((response) => {
         return response.json();
@@ -20,7 +28,7 @@ class DrawingPage extends React.Component {
       .then((data) => {
         this.props.promptReceived(data.id, data.prompt);
       });
-  };
+  }
 
   render() {
     return (
