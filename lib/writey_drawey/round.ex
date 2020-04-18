@@ -3,12 +3,13 @@ defmodule WriteyDrawey.Round do
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  alias WriteyDrawey.{Drawing, Round, Repo}
+  alias WriteyDrawey.{Drawing, Game, Prompt, Round, Repo}
 
   schema "rounds" do
     field :ordinality, :integer
     belongs_to :game, Game
     has_many :drawings, Drawing
+    has_many :prompts, Prompt
 
     timestamps()
   end
@@ -41,5 +42,12 @@ defmodule WriteyDrawey.Round do
     else
       round
     end
+  end
+
+  def get_submissions(%Round{} = round) do
+    drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id)
+    prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id)
+
+    Enum.concat(drawings, prompts)
   end
 end

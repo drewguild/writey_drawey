@@ -25,8 +25,8 @@ defmodule WriteyDraweyWeb.PromptsController do
 
     # Prompts ordered by player and 'rotated' as if being passed circularly
     prompts = Round.find!(game_id, ordinality) 
-    |> Repo.preload(drawings: from(p in Prompt, order_by: p.player_id))
-    |> Map.get(:drawings)
+    |> Repo.preload(prompts: from(p in Prompt, order_by: p.player_id))
+    |> Map.get(:prompts)
     |> rotate
 
     prompt = Enum.zip(players, prompts) |> Enum.into(%{}) |> Map.get(player_id)

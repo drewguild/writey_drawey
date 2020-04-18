@@ -3,7 +3,7 @@ defmodule WriteyDrawey.Game do
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  alias WriteyDrawey.{Game, Player, Repo}
+  alias WriteyDrawey.{Game, Player, Prompt, Repo, Round}
 
   schema "games" do
     field :code, :string
@@ -42,6 +42,17 @@ defmodule WriteyDrawey.Game do
     changeset(%Game{}, %{code: random_code, })
     |> Ecto.Changeset.put_assoc(:players, [%Player{name: name}])
     |> Repo.insert!
+  end
+
+  def round_complete?(id, ordinality) do
+    number_of_players = get_players(id)
+    |> Enum.count 
+
+    number_of_submissions = Round.find!(id, ordinality)
+    |> Round.get_submissions
+    |> Enum.count
+
+    number_of_players == number_of_submissions
   end
 
   defp random_code do
