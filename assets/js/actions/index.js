@@ -31,6 +31,10 @@ export const playerUpdated = ({ id, name, status }) => ({
 })
 
 // Prompt Action Creators
+export const promptExpired = () => ({
+  type: 'PROMPT_EXPIRED'
+})
+
 export const promptReceived = (id, text) => ({
   type: 'PROMPT_RECEIVED',
   prompt_id: id,

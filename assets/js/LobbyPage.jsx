@@ -10,6 +10,8 @@ class LobbyPage extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = { toNextRound: false }
+
     this.createRound = this.createRound.bind(this)
     this.fetchPlayers = this.fetchPlayers.bind(this)
   }
@@ -17,6 +19,16 @@ class LobbyPage extends React.Component {
   componentDidMount() {
     this.fetchPlayers()
     this.timer = setInterval(() => this.fetchPlayers(), 3000)
+  }
+
+  componentDidUpdate() {
+    if (this.props.round) {
+      this.setState({ toNextRound: true })
+    }
+
+    if (this.props.shouldBeginGame) {
+      this.createRound()
+    }
   }
 
   componentWillUnmount() {
@@ -50,8 +62,7 @@ class LobbyPage extends React.Component {
   render() {
     const timer = this.props.allPlayersReady ? <Timer time={5} /> : null
 
-    if (this.props.shouldBeginGame) {
-      this.createRound()
+    if (this.state.toNextRound) {
       return <Redirect to={"/draw"} />
     }
 
@@ -70,7 +81,8 @@ const mapState = (state) => ({
   allPlayersReady: _.every(state.player.players, (player) => { return player.status == 'READY' }),
   shouldBeginGame: state.timer.expired,
   gameId: state.game.id,
-  gameCode: state.game.code
+  gameCode: state.game.code,
+  round: state.game.round
 })
 
 const mapDispath = {

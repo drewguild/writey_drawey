@@ -61,6 +61,8 @@ const player = (state = { currentPlayer: null, ids: [], players: [] }, action) =
 
 const prompt = (state = { id: null, text: null }, action) => {
   switch (action.type) {
+    case 'PROMPT_EXPIRED':
+      return Object.assign({}, state, { id: null, text: null })
     case 'PROMPT_RECEIVED':
       return Object.assign({}, state, { id: action.prompt_id, text: action.text })
     default:
