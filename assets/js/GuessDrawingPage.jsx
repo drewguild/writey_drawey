@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 
 import Timer from './Timer.jsx'
+import { Redirect } from 'react-router-dom';
+import { roundChanged } from './actions'
 
 class GuessDrawingPage extends React.Component {
   constructor(props) {
@@ -14,18 +16,33 @@ class GuessDrawingPage extends React.Component {
     this.setGuess = this.setGuess.bind(this)
   }
 
+  // TODO: this duplicates logic from LobbyPage
+  advanceRound() {
+    fetch(`/api/games/${this.props.gameId}/rounds?current_round=${this.props.round}`)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        this.props.roundChanged(data.ordinality)
+      })
+  }
+
   componentDidMount() {
     this.fetchDrawing();
     this.timer = setInterval(() => this.fetchDrawing(), 100)
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
+    if (prevProps.round && prevProps.round != this.props.round) {
+      this.setState({ toNextRound: true })
+    }
+
     if (this.state.imageBinary) {
       clearInterval(this.timer)
       this.timer = null
     }
 
-    if (this.props.shouldSubmit) {
+    if (this.shouldSubmit()) {
       this.submitGuess()
     }
   }
@@ -49,6 +66,10 @@ class GuessDrawingPage extends React.Component {
     this.setState({ guess: e.target.value })
   }
 
+  shouldSubmit() {
+    return (this.props.shouldSubmit && !this.state.hasSubmitted);
+  }
+
   submitGuess() {
     fetch("/api/prompts", {
       method: "Post",
@@ -60,9 +81,20 @@ class GuessDrawingPage extends React.Component {
         round: this.props.round
       })
     })
+      .then((response) => {
+        return response.json()
+      })
+      .then((_) => {
+        this.setState({ hasSubmitted: true })
+        this.advanceRound()
+      })
   }
 
   render() {
+    if (this.state.toNextRound) {
+      return <Redirect to="/draw" />
+    }
+
     return (
       <div>
         <h2>What do you see?</h2>
@@ -74,6 +106,10 @@ class GuessDrawingPage extends React.Component {
   }
 }
 
+const mapDispatch = {
+  roundChanged
+}
+
 const mapState = (state) => ({
   currentPlayer: state.player.currentPlayer,
   gameId: state.game.id,
@@ -81,4 +117,4 @@ const mapState = (state) => ({
   shouldSubmit: state.timer.expired
 })
 
-export default connect(mapState)(GuessDrawingPage);
+export default connect(mapState, mapDispatch)(GuessDrawingPage);

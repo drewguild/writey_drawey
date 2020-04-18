@@ -17,7 +17,15 @@ class DrawingPage extends React.Component {
   };
 
   componentDidMount() {
-    this.fetchRandomPrompt()
+    if (this.props.isFirstRound) {
+      this.fetchRandomPrompt()
+    } else {
+      this.fetchNextPrompt()
+    }
+  }
+
+  fetchNextPrompt() {
+
   }
 
   fetchRandomPrompt() {
@@ -35,7 +43,7 @@ class DrawingPage extends React.Component {
       <div>
         <Prompt />
         <DrawingCanvas />
-        <Timer time={30} />
+        <Timer time={15} />
       </div>
     )
   }
@@ -45,4 +53,8 @@ const mapDispatchToProps = {
   promptReceived
 }
 
-export default connect(null, mapDispatchToProps)(DrawingPage);
+const mapState = (state) => ({
+  isFirstRound: state.game.round === 1
+})
+
+export default connect(mapState, mapDispatchToProps)(DrawingPage);
