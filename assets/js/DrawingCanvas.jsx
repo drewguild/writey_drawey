@@ -105,6 +105,7 @@ class DrawingCanvas extends React.Component {
       body: JSON.stringify({
         drawing_base64: drawingData,
         game_id: this.props.gameId,
+        player_id: this.props.playerId,
         prompt_id: this.props.promptId,
         round: this.props.round
       })
@@ -160,6 +161,7 @@ class DrawingCanvas extends React.Component {
 const mapState = (state) => {
   return {
     gameId: state.game.id,
+    playerId: state.player.currentPlayer,
     promptId: state.prompt.id,
     round: state.game.round,
     shouldSubmit: state.timer.expired

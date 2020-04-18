@@ -12,9 +12,9 @@ defmodule WriteyDraweyWeb.DrawingsController do
     render(conn, "show.json", drawing: drawing)
   end
 
-  def create(conn, %{"drawing_base64" => binary, "game_id" => game_id, "prompt_id" => prompt_id, "round" => round}) do
+  def create(conn, %{"drawing_base64" => binary, "game_id" => game_id, "player_id" => player_id, "prompt_id" => prompt_id, "round" => round}) do
     round_id = Round.find!(game_id, round) |> Map.get(:id)
-    drawing = Drawing.create_drawing!(%{image_binary: binary, round_id: round_id})
+    drawing = Drawing.create_drawing!(%{image_binary: binary, player_id: player_id, round_id: round_id})
     Prompt.link_drawing!(prompt_id, drawing)
     json(conn, %{success: true, drawing_id: drawing.id})
   end
@@ -30,12 +30,18 @@ defmodule WriteyDraweyWeb.DrawingsController do
     |> Game.get_players
     |> Enum.map(&(&1.id))
 
+    # Drawings ordered by player and 'rotated' as if being passed circularly
     drawings = Round.find!(game_id, ordinality) 
-    |> Repo.preload(:drawings)
+    |> Repo.preload(drawings: from(d in Drawing, order_by: d.player_id))
     |> Map.get(:drawings)
+    |> rotate
 
     drawing = Enum.zip(players, drawings) |> Enum.into(%{}) |> Map.get(player_id)
 
     json(conn, %{success: true, image_binary: drawing.image_binary})
+  end
+
+  defp rotate([head | tail]) do
+    tail ++ [head]
   end
 end

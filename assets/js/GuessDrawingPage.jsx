@@ -8,7 +8,26 @@ class GuessDrawingPage extends React.Component {
     this.state = {
       imageBinary: null
     }
+  }
 
+  componentDidMount() {
+    this.fetchDrawing();
+    this.timer = setInterval(() => this.fetchDrawing(), 100)
+  }
+
+  componentDidUpdate() {
+    if (this.state.imageBinary) {
+      clearInterval(this.timer)
+      this.timer = null
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer)
+    this.timer = null
+  }
+
+  fetchDrawing() {
     fetch(`/api/drawings/next?player_id=${this.props.currentPlayer}&round=${this.props.round - 1}`)
       .then((response) => {
         return response.json();

@@ -7,6 +7,7 @@ defmodule WriteyDrawey.Drawing do
   schema "drawings" do
     field :image_binary, :binary
     belongs_to :round, Round
+    belongs_to :player, Player
 
     timestamps()
   end
@@ -14,7 +15,7 @@ defmodule WriteyDrawey.Drawing do
   @doc false
   def changeset(drawing, attrs) do
     drawing
-    |> cast(attrs, [:image_binary, :round_id])
+    |> cast(attrs, [:image_binary, :player_id, :round_id])
     |> validate_required([:image_binary])
   end
 
