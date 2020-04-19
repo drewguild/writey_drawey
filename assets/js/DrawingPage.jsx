@@ -93,7 +93,7 @@ class DrawingPage extends React.Component {
       <div>
         <Prompt />
         <DrawingCanvas />
-        <Timer time={60} />
+        <Timer time={90} />
       </div>
     )
   }

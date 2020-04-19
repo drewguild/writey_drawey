@@ -11,7 +11,8 @@ class GuessDrawingPage extends React.Component {
 
     this.state = {
       imageBinary: null,
-      waiting: true
+      waiting: true,
+      guess: ""
     }
 
     this.setGuess = this.setGuess.bind(this)
@@ -115,7 +116,7 @@ class GuessDrawingPage extends React.Component {
         <h2>What do you see?</h2>
         <img src={this.state.imageBinary} />
         <input type='text' placeholder="Make a guess" onChange={this.setGuess} />
-        <Timer time={15} />
+        <Timer time={30} />
       </div>
     )
   }

@@ -59,7 +59,15 @@ defmodule WriteyDrawey.Prompt do
         "Dog", 
         "Apple",
         "Pants",
-        "House"
+        "House",
+        "Goat",
+        "Sandwich",
+        "Snowman",
+        "City",
+        "Island",
+        "Baseball",
+        "Music",
+        "Sun"
     ])
   end
 end
