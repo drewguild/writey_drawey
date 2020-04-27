@@ -1,3 +1,5 @@
+import { Players } from "../api";
+
 // Game Action Creators
 export const gameReceived = (id, code) => ({
   type: 'GAME_RECEIVED',
@@ -15,6 +17,17 @@ export const currentPlayerSet = (id) => ({
   type: 'CURRENT_PLAYER_SET',
   player_id: id
 });
+
+export const fetchPlayers = (gameId) => {
+  return dispatch => {
+    Players.forGame(gameId)
+      .then(response => {
+        _.map(response.data, (player) => {
+          dispatch(playerReceived(player))
+        })
+      })
+  }
+}
 
 export const playerReceived = ({ id, name, status }) => ({
   type: 'PLAYER_RECEIVED',

@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { playerReceived, roundChanged } from './actions'
-import { Players } from './api'
+import { fetchPlayers, roundChanged } from './actions'
 
 import PlayerList from './PlayerList.jsx';
 import Timer from './Timer.jsx'
@@ -15,12 +14,11 @@ class LobbyPage extends React.Component {
     this.state = { toNextRound: false }
 
     this.createRound = this.createRound.bind(this)
-    this.fetchPlayers = this.fetchPlayers.bind(this)
   }
 
   componentDidMount() {
-    this.fetchPlayers()
-    this.timer = setInterval(() => this.fetchPlayers(), 3000)
+    this.props.fetchPlayers(this.props.gameId)
+    this.timer = setInterval(() => this.props.fetchPlayers(this.props.gameId), 3000)
   }
 
   componentDidUpdate() {
@@ -46,17 +44,6 @@ class LobbyPage extends React.Component {
       .then((data) => {
         this.props.roundChanged(data.ordinality)
       })
-  }
-
-  fetchPlayers() {
-    // TODO: handling the promise here feels weird
-    const p = Players.forGame(this.props.gameId)
-
-    p.then((response) => {
-      _.map(response.data, (player) => {
-        this.props.playerReceived(player)
-      })
-    })
   }
 
   render() {
@@ -86,7 +73,7 @@ const mapState = (state) => ({
 })
 
 const mapDispath = {
-  playerReceived,
+  fetchPlayers,
   roundChanged
 }
 
