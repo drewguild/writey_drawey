@@ -24,7 +24,8 @@ import {
   Switch
 } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk'
 
 import rootReducer from './reducers';
 import { loadState, saveState } from './localStorage'
@@ -38,7 +39,8 @@ function App() {
   const persistedState = loadState();
   const store = createStore(
     rootReducer,
-    persistedState
+    persistedState,
+    applyMiddleware(thunk)
   )
 
   store.subscribe(() => {
