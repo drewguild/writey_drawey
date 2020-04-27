@@ -1,4 +1,4 @@
-import { Players } from "../api";
+import { Games, Players } from "../api";
 
 // Game Action Creators
 export const gameReceived = (id, code) => ({
@@ -6,6 +6,15 @@ export const gameReceived = (id, code) => ({
   game_id: id,
   code: code
 })
+
+export const beginRound = (gameId) => {
+  return dispatch => {
+    Games.firstRound(gameId)
+      .then(response => {
+        dispatch(roundChanged(response.data.ordinality))
+      })
+  }
+}
 
 export const roundChanged = (ordinality) => ({
   type: 'ROUND_CHANGED',

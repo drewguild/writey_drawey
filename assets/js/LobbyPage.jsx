@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { fetchPlayers, roundChanged } from './actions'
+import { beginRound, fetchPlayers } from './actions'
 
 import PlayerList from './PlayerList.jsx';
 import Timer from './Timer.jsx'
@@ -12,8 +12,6 @@ class LobbyPage extends React.Component {
     super(props)
 
     this.state = { toNextRound: false }
-
-    this.createRound = this.createRound.bind(this)
   }
 
   componentDidMount() {
@@ -27,23 +25,13 @@ class LobbyPage extends React.Component {
     }
 
     if (this.props.shouldBeginGame) {
-      this.createRound()
+      this.props.beginRound(this.props.gameId)
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.timer)
     this.timer = null
-  }
-
-  createRound() {
-    fetch(`/api/games/${this.props.gameId}/rounds`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.roundChanged(data.ordinality)
-      })
   }
 
   render() {
@@ -73,8 +61,8 @@ const mapState = (state) => ({
 })
 
 const mapDispath = {
-  fetchPlayers,
-  roundChanged
+  beginRound,
+  fetchPlayers
 }
 
 export default connect(mapState, mapDispath)(LobbyPage);
