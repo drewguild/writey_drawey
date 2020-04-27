@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash';
 
-import { currentPlayerSet, gameReceived } from './actions'
+import { addPlayer, createGame } from './actions'
 import { Redirect } from 'react-router-dom';
 
 class LandingPage extends React.Component {
@@ -20,20 +20,7 @@ class LandingPage extends React.Component {
       return
     }
 
-    fetch(`/api/games/${this.state.gameCode}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        player_name: this.state.playerName
-      })
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.currentPlayerSet(data.players[0])
-        this.props.gameReceived(data.game_id, data.game_code)
-      })
+    this.props.addPlayer(this.state.gameCode, this.state.playerName)
   }
 
   newGame() {
@@ -41,20 +28,7 @@ class LandingPage extends React.Component {
       return
     }
 
-    fetch("/api/games", {
-      method: 'Post',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        initial_player_name: this.state.playerName
-      })
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.props.currentPlayerSet(data.players[0])
-        this.props.gameReceived(data.game_id, data.game_code)
-      })
+    this.props.createGame(this.state.playerName)
   };
 
   setGameCode(e) {
@@ -90,8 +64,8 @@ const mapState = (state) => ({
 })
 
 const mapDispatch = {
-  currentPlayerSet,
-  gameReceived
+  addPlayer,
+  createGame
 }
 
 export default connect(mapState, mapDispatch)(LandingPage);

@@ -7,11 +7,31 @@ export const gameReceived = (id, code) => ({
   code: code
 })
 
+export const addPlayer = (gameCode, playerName) => {
+  return dispatch => {
+    Games.addPlayer(gameCode, playerName)
+      .then(response => {
+        dispatch(currentPlayerSet(response.data.players[0]))
+        dispatch(gameReceived(response.data.game_id, response.data.game_code))
+      })
+  }
+}
+
 export const beginRound = (gameId) => {
   return dispatch => {
     Games.firstRound(gameId)
       .then(response => {
         dispatch(roundChanged(response.data.ordinality))
+      })
+  }
+}
+
+export const createGame = (playerName) => {
+  return dispatch => {
+    Games.create(playerName)
+      .then(response => {
+        dispatch(currentPlayerSet(response.data.players[0]))
+        dispatch(gameReceived(response.data.game_id, response.data.game_code))
       })
   }
 }
