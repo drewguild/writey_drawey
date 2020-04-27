@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { playerReceived, roundChanged } from './actions'
+import { Players } from './api'
+
 import PlayerList from './PlayerList.jsx';
 import Timer from './Timer.jsx'
 import { Redirect } from 'react-router-dom';
@@ -47,16 +49,14 @@ class LobbyPage extends React.Component {
   }
 
   fetchPlayers() {
-    // TODO: will need to clear players who have dropped (less urgent)
-    fetch(`/api/games/${this.props.gameId}/players`)
-      .then((response) => {
-        return response.json()
+    // TODO: handling the promise here feels weird
+    const p = Players.forGame(this.props.gameId)
+
+    p.then((response) => {
+      _.map(response.data, (player) => {
+        this.props.playerReceived(player)
       })
-      .then((data) => {
-        _.map(data, (player) => {
-          this.props.playerReceived(player)
-        });
-      })
+    })
   }
 
   render() {
