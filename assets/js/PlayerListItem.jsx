@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import _ from 'lodash'
-import { playerReceived } from './actions'
+import { changePlayerStatus } from './actions'
 
 class PlayerListItem extends React.Component {
   constructor(props) {
@@ -11,19 +11,7 @@ class PlayerListItem extends React.Component {
   }
 
   readyPlayer() {
-    fetch(`/api/players/${this.props.id}`, {
-      method: "put",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        status: 'READY'
-      })
-    })
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.playerReceived(data)
-      })
+    this.props.changePlayerStatus(this.props.id, 'READY')
   }
 
   render() {
@@ -60,7 +48,7 @@ const mapState = (state, ownProps) => {
 };
 
 const mapDispatch = {
-  playerReceived
+  changePlayerStatus,
 }
 
 export default connect(mapState, mapDispatch)(PlayerListItem)

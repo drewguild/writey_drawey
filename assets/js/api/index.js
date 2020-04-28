@@ -11,5 +11,7 @@ export const Games = {
 
 export const Players = {
   forGame: (gameId) =>
-    axios.get(`/api/games/${gameId}/players`)
+    axios.get(`/api/games/${gameId}/players`),
+  update: (playerId, options) =>
+    axios.put(`/api/players/${playerId}`, options)
 }

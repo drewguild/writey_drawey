@@ -47,6 +47,15 @@ export const currentPlayerSet = (id) => ({
   player_id: id
 });
 
+export const changePlayerStatus = (playerId, status) => {
+  return dispatch => {
+    Players.update(playerId, { status: status })
+      .then(response => {
+        dispatch(playerReceived(response.data))
+      })
+  }
+}
+
 export const fetchPlayers = (gameId) => {
   return dispatch => {
     Players.forGame(gameId)
