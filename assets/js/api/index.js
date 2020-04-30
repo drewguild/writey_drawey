@@ -9,7 +9,9 @@ export const Drawings = {
         player_id: playerId,
         round: round
       }
-    )
+    ),
+  get: (playerId, round) =>
+    axios.get(`/api/drawings/next?player_id=${playerId}&round=${round}`)
 }
 
 export const Games = {
@@ -33,6 +35,8 @@ export const Players = {
 }
 
 export const Prompts = {
+  create: (text, gameId, playerId, round) =>
+    axios.post("/api/prompts", { text: text, game_id: gameId, player_id: playerId, round: round }),
   next: (playerId, round) =>
     axios.get(`/api/prompts/next?player_id=${playerId}&round=${round}`),
   random: () =>
