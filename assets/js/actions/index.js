@@ -1,36 +1,27 @@
-// Game Action Creators
-export const gameReceived = (id, code) => ({
-  type: 'GAME_RECEIVED',
-  game_id: id,
-  code: code
-})
+import { Prompts } from '../api'
 
-export const roundChanged = (ordinality) => ({
-  type: 'ROUND_CHANGED',
-  ordinality: ordinality
-})
-
-// Player Action Creators
-export const currentPlayerSet = (id) => ({
-  type: 'CURRENT_PLAYER_SET',
-  player_id: id
-});
-
-export const playerReceived = ({ id, name, status }) => ({
-  type: 'PLAYER_RECEIVED',
-  player_id: id,
-  name: name,
-  status: status
-})
-
-export const playerUpdated = ({ id, name, status }) => ({
-  type: 'PLAYER_UPDATED',
-  player_id: id,
-  name: name,
-  status, status
-})
+export * from './GameActions'
+export * from './PlayerActions'
 
 // Prompt Action Creators
+export const fetchRandomPrompt = () => {
+  return dispatch => {
+    Prompts.random()
+      .then((response) => {
+        dispatch(promptReceived(response.data.id, response.data.prompt))
+      })
+  }
+}
+
+export const fetchNextPrompt = (playerId, round) => {
+  return dispatch => {
+    Prompts.next(playerId, round)
+      .then((response) => {
+        dispatch(promptReceived(response.data.id, response.data.prompt))
+      })
+  }
+}
+
 export const promptExpired = () => ({
   type: 'PROMPT_EXPIRED'
 })

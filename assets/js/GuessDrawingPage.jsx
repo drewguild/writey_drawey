@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 
 import Timer from './Timer.jsx'
 import { Redirect } from 'react-router-dom';
-import { roundChanged } from './actions'
+import { advanceToNextRound } from './actions'
+import { Games, Drawings, Prompts } from './api'
 
 class GuessDrawingPage extends React.Component {
   constructor(props) {
@@ -18,25 +19,10 @@ class GuessDrawingPage extends React.Component {
     this.setGuess = this.setGuess.bind(this)
   }
 
-  // TODO: this duplicates logic from LobbyPage
-  advanceRound() {
-    fetch(`/api/games/${this.props.gameId}/rounds?current_round=${this.props.round}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.roundChanged(data.ordinality)
-      })
-  }
-
   checkRound() {
-    fetch(`api/games/${this.props.gameId}/rounds/complete?round=${this.props.round - 1}`)
+    Games.roundStatus(this.props.gameId, this.props.round - 1)
       .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        this.setState({ waiting: !data.complete })
+        this.setState({ waiting: !response.data.complete })
       })
   }
 
@@ -65,12 +51,9 @@ class GuessDrawingPage extends React.Component {
   }
 
   fetchDrawing() {
-    fetch(`/api/drawings/next?player_id=${this.props.currentPlayer}&round=${this.props.round - 1}`)
+    Drawings.get(this.props.currentPlayer, this.props.round - 1)
       .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.setState({ imageBinary: data.image_binary })
+        this.setState({ imageBinary: response.data.image_binary })
       })
   }
 
@@ -83,22 +66,15 @@ class GuessDrawingPage extends React.Component {
   }
 
   submitGuess() {
-    fetch("/api/prompts", {
-      method: "Post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text: this.state.guess,
-        game_id: this.props.gameId,
-        player_id: this.props.currentPlayer,
-        round: this.props.round
-      })
-    })
-      .then((response) => {
-        return response.json()
-      })
+    Prompts.create(
+      this.state.guess,
+      this.props.gameId,
+      this.props.currentPlayer,
+      this.props.round
+    )
       .then((_) => {
         this.setState({ hasSubmitted: true })
-        this.advanceRound()
+        this.props.advanceToNextRound(this.props.gameId, this.props.round)
       })
   }
 
@@ -123,7 +99,7 @@ class GuessDrawingPage extends React.Component {
 }
 
 const mapDispatch = {
-  roundChanged
+  advanceToNextRound,
 }
 
 const mapState = (state) => ({

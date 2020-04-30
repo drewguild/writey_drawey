@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { playerReceived, roundChanged } from './actions'
+import { beginRound, fetchPlayers } from './actions'
+
 import PlayerList from './PlayerList.jsx';
 import Timer from './Timer.jsx'
 import { Redirect } from 'react-router-dom';
@@ -11,14 +12,11 @@ class LobbyPage extends React.Component {
     super(props)
 
     this.state = { toNextRound: false }
-
-    this.createRound = this.createRound.bind(this)
-    this.fetchPlayers = this.fetchPlayers.bind(this)
   }
 
   componentDidMount() {
-    this.fetchPlayers()
-    this.timer = setInterval(() => this.fetchPlayers(), 3000)
+    this.props.fetchPlayers(this.props.gameId)
+    this.timer = setInterval(() => this.props.fetchPlayers(this.props.gameId), 3000)
   }
 
   componentDidUpdate() {
@@ -27,36 +25,13 @@ class LobbyPage extends React.Component {
     }
 
     if (this.props.shouldBeginGame) {
-      this.createRound()
+      this.props.beginRound(this.props.gameId)
     }
   }
 
   componentWillUnmount() {
     clearInterval(this.timer)
     this.timer = null
-  }
-
-  createRound() {
-    fetch(`/api/games/${this.props.gameId}/rounds`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.roundChanged(data.ordinality)
-      })
-  }
-
-  fetchPlayers() {
-    // TODO: will need to clear players who have dropped (less urgent)
-    fetch(`/api/games/${this.props.gameId}/players`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        _.map(data, (player) => {
-          this.props.playerReceived(player)
-        });
-      })
   }
 
   render() {
@@ -86,8 +61,8 @@ const mapState = (state) => ({
 })
 
 const mapDispath = {
-  playerReceived,
-  roundChanged
+  beginRound,
+  fetchPlayers
 }
 
 export default connect(mapState, mapDispath)(LobbyPage);
