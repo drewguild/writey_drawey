@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux'
 
-import { advanceToNextRound, roundChanged } from './actions'
+import { advanceToNextRound } from './actions'
 import { Drawings } from "./api";
 
 const PEN_SIZES = {
@@ -151,7 +151,6 @@ const mapState = (state) => {
 
 const mapDispatch = {
   advanceToNextRound,
-  roundChanged
 }
 
 export default connect(mapState, mapDispatch)(DrawingCanvas);
