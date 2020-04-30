@@ -1,7 +1,27 @@
+import { Prompts } from '../api'
+
 export * from './GameActions'
 export * from './PlayerActions'
 
 // Prompt Action Creators
+export const fetchRandomPrompt = () => {
+  return dispatch => {
+    Prompts.random()
+      .then((response) => {
+        dispatch(promptReceived(response.data.id, response.data.prompt))
+      })
+  }
+}
+
+export const fetchNextPrompt = (playerId, round) => {
+  return dispatch => {
+    Prompts.next(playerId, round)
+      .then((response) => {
+        dispatch(promptReceived(response.data.id, response.data.prompt))
+      })
+  }
+}
+
 export const promptExpired = () => ({
   type: 'PROMPT_EXPIRED'
 })

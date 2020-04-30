@@ -2,11 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import { promptExpired, promptReceived } from './actions';
+import { fetchNextPrompt, fetchRandomPrompt, promptExpired } from './actions';
 
 import DrawingCanvas from './DrawingCanvas.jsx';
 import Prompt from './Prompt.jsx';
 import Timer from './Timer.jsx'
+import { Games } from './api';
 
 
 class DrawingPage extends React.Component {
@@ -46,42 +47,18 @@ class DrawingPage extends React.Component {
       return
     }
 
-    fetch(`api/games/${this.props.gameId}/rounds/complete?round=${this.props.round - 1}`)
+    Games.roundStatus(this.props.gameId, this.props.round - 1)
       .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        console.log(data)
-        this.setState({ waiting: !data.complete })
+        this.setState({ waiting: !response.data.complete })
       })
   }
 
   fetchPrompt() {
     if (this.props.isFirstRound) {
-      this.fetchRandomPrompt()
+      this.props.fetchRandomPrompt()
     } else {
-      this.fetchNextPrompt()
+      this.props.fetchNextPrompt(this.props.currentPlayer, this.props.round - 1)
     }
-  }
-
-  fetchNextPrompt() {
-    fetch(`/api/prompts/next?player_id=${this.props.currentPlayer}&round=${this.props.round - 1}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.promptReceived(data.id, data.prompt)
-      })
-  }
-
-  fetchRandomPrompt() {
-    fetch('/api/prompts/random')
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        this.props.promptReceived(data.id, data.prompt);
-      });
   }
 
   render() {
@@ -93,15 +70,16 @@ class DrawingPage extends React.Component {
       <div>
         <Prompt />
         <DrawingCanvas />
-        <Timer time={90} />
+        <Timer time={20} />
       </div>
     )
   }
 };
 
 const mapDispatchToProps = {
-  promptExpired,
-  promptReceived
+  fetchNextPrompt,
+  fetchRandomPrompt,
+  promptExpired
 }
 
 const mapState = (state) => ({
