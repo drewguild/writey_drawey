@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux'
 
-import { roundChanged } from './actions'
+import { advanceToNextRound, roundChanged } from './actions'
 import { Drawings } from "./api";
 
 const PEN_SIZES = {
@@ -25,7 +25,6 @@ class DrawingCanvas extends React.Component {
 
     this.changePenColor = this.changePenColor.bind(this);
     this.changePenSize = this.changePenSize.bind(this);
-    this.advanceRound = this.advanceRound.bind(this);
     this.draw = this.draw.bind(this);
     this.shouldSubmit = this.shouldSubmit.bind(this);
     this.submitDrawing = this.submitDrawing.bind(this);
@@ -85,17 +84,6 @@ class DrawingCanvas extends React.Component {
     ctx.closePath();
   };
 
-  // TODO: this duplicates logic from LobbyPage
-  advanceRound() {
-    fetch(`/api/games/${this.props.gameId}/rounds?current_round=${this.props.round}`)
-      .then((response) => {
-        return response.json()
-      })
-      .then((data) => {
-        this.props.roundChanged(data.ordinality)
-      })
-  }
-
   submitDrawing() {
     const canvas = this.refs.canvas;
     const drawingData = canvas.toDataURL();
@@ -108,7 +96,7 @@ class DrawingCanvas extends React.Component {
     )
       .then((_) => {
         this.setState({ hasSubmitted: true })
-        this.advanceRound();
+        this.props.advanceToNextRound(this.props.gameId, this.props.round)
       })
   };
 
@@ -162,6 +150,7 @@ const mapState = (state) => {
 }
 
 const mapDispatch = {
+  advanceToNextRound,
   roundChanged
 }
 

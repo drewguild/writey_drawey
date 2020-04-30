@@ -18,7 +18,9 @@ export const Games = {
   create: (playerName) =>
     axios.post("/api/games", { initial_player_name: playerName }),
   firstRound: (gameId) =>
-    axios.get(`api/games/${gameId}/rounds`)
+    axios.get(`api/games/${gameId}/rounds`),
+  nextRound: (gameId, currentRound) =>
+    axios.get(`api/games/${gameId}/rounds?current_round=${currentRound}`)
 }
 
 export const Players = {

@@ -26,6 +26,15 @@ export const beginRound = (gameId) => {
   }
 }
 
+export const advanceToNextRound = (gameId, currentRound) => {
+  return dispatch => {
+    Games.nextRound(gameId, currentRound)
+      .then(response => {
+        dispatch(roundChanged(response.data.ordinality))
+      })
+  }
+}
+
 export const createGame = (playerName) => {
   return dispatch => {
     Games.create(playerName)
