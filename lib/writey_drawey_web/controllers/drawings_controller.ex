@@ -12,7 +12,7 @@ defmodule WriteyDraweyWeb.DrawingsController do
     render(conn, "show.json", drawing: drawing)
   end
 
-  def create(conn, %{"drawing_base64" => binary, "game_id" => game_id, "player_id" => player_id, "prompt_id" => prompt_id, "round" => round}) do
+  def create(conn, %{"drawing_base64" => binary, "game_id" => game_id, "player_id" => player_id, "round" => round}) do
     round_id = Round.find!(game_id, round) |> Map.get(:id)
     drawing = Drawing.find_or_create(%{image_binary: binary, player_id: player_id, round_id: round_id})
     json(conn, %{success: true, drawing_id: drawing.id})
