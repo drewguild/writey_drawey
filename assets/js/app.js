@@ -31,6 +31,7 @@ import rootReducer from './reducers';
 import { loadState, saveState } from './localStorage'
 
 import DrawingPage from './DrawingPage.jsx'
+import EndGamePage from './EndGamePage.jsx'
 import GuessDrawingPage from "./GuessDrawingPage.jsx"
 import LandingPage from './LandingPage.jsx'
 import LobbyPage from './LobbyPage.jsx'
@@ -59,6 +60,9 @@ function App() {
           </Route>
           <Route path='/lobby'>
             <LobbyPage />
+          </Route>
+          <Route path='/end'>
+            <EndGamePage />
           </Route>
           <Route>
             <LandingPage />
