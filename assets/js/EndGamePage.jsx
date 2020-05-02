@@ -1,4 +1,5 @@
 import React, { useState, Children } from 'react'
+import { useSelector } from 'react-redux'
 
 function TabPanel(props) {
   const { children, value, index } = props
@@ -11,28 +12,29 @@ function TabPanel(props) {
 }
 
 function EndGamePage() {
-  const [value, setValue] = useState(0)
+  const currentPlayerId = useSelector(state => state.player.currentPlayer)
+  const players = useSelector(state => state.player.players)
+  const [value, setValue] = useState(currentPlayerId)
 
   return (
     <div>
       <div value={value} >
-        <button value={0} onClick={() => setValue(0)}>Robbo</button>
-        <button value={1} onClick={() => setValue(1)}>Tommo</button>
-        <button value={2} onClick={() => setValue(2)}>Johnno</button>
-        <button value={3} onClick={() => setValue(3)}>Oporto</button>
+        {players.map((player) => {
+          return (
+            <button
+              key={player.id}
+              value={player.id}
+              onClick={() => setValue(player.id)}
+            >
+              {player.name}
+            </button>)
+        })}
       </div>
-      <TabPanel value={value} index={0} >
-        <p>Robbo</p>
-      </TabPanel>
-      <TabPanel value={value} index={1} >
-        <p>Tommo</p>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <p>Johnno</p>
-      </TabPanel>
-      <TabPanel value={value} index={3} >
-        <p>Oporto</p>
-      </TabPanel>
+      {players.map((player) => {
+        return (<TabPanel value={value} index={player.id} key={player.id}>
+          <p>{player.name}</p>
+        </TabPanel>)
+      })}
     </div>
   )
 }
