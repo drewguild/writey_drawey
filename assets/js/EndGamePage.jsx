@@ -1,5 +1,7 @@
 import React, { useState, Children } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+import { fetchGameSummary } from './actions'
 
 function TabPanel(props) {
   const { children, value, index } = props
@@ -12,6 +14,11 @@ function TabPanel(props) {
 }
 
 function EndGamePage() {
+  const dispatch = useDispatch()
+
+  const gameId = useSelector(state => state.game.id)
+  dispatch(fetchGameSummary(gameId))
+
   const currentPlayerId = useSelector(state => state.player.currentPlayer)
   const players = useSelector(state => state.player.players)
   const [value, setValue] = useState(currentPlayerId)

@@ -1,7 +1,6 @@
 import { Games } from '../api'
 import { currentPlayerSet } from './index'
 
-// Game Action Creators
 export const gameReceived = (id, code) => ({
   type: 'GAME_RECEIVED',
   game_id: id,
@@ -42,6 +41,16 @@ export const createGame = (playerName) => {
       .then(response => {
         dispatch(currentPlayerSet(response.data.players[0]))
         dispatch(gameReceived(response.data.game_id, response.data.game_code))
+      })
+  }
+}
+
+export const fetchGameSummary = (gameId) => {
+  return dispatch => {
+    Games.summary(gameId)
+      .then(response => {
+        console.log(response)
+        // dispatch(summaryReceived(response.data))
       })
   }
 }

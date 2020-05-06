@@ -24,7 +24,9 @@ export const Games = {
   nextRound: (gameId, currentRound) =>
     axios.get(`api/games/${gameId}/rounds?current_round=${currentRound}`),
   roundStatus: (gameId, round) =>
-    axios.get(`api/games/${gameId}/rounds/complete?round=${round}`)
+    axios.get(`api/games/${gameId}/rounds/complete?round=${round}`),
+  summary: (gameId) =>
+    axios.get(`api/games/${gameId}/summary`)
 }
 
 export const Players = {
