@@ -36,7 +36,15 @@ function EndSequences(props) {
         const initial = sequence.initial
 
         return (<TabPanel value={value} index={initial} key={initial}>
-          <p>{initial}</p>
+          <h3>{initial}</h3>
+
+          {sequence.entries.map((entry, index) => {
+            if (entry.type == 'DRAWING') {
+              return <img src={entry.value} key={index} />
+            } else {
+              return <h3 key={index}>{entry.value}</h3>
+            }
+          })}
         </TabPanel>)
       })}
     </div>
