@@ -70,6 +70,15 @@ const prompt = (state = { id: null, text: null }, action) => {
   }
 };
 
+const summary = (state = { sequences: [] }, action) => {
+  switch (action.type) {
+    case 'SUMMARY_RECEIVED':
+      return { sequences: action.sequences }
+    default:
+      return state
+  }
+}
+
 const timer = (state = { expired: false }, action) => {
   switch (action.type) {
     case 'TIME_EXPIRED':
@@ -85,6 +94,7 @@ const rootReducer = combineReducers({
   game,
   player,
   prompt,
+  summary,
   timer
 });
 

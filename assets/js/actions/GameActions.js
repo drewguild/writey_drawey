@@ -49,8 +49,7 @@ export const fetchGameSummary = (gameId) => {
   return dispatch => {
     Games.summary(gameId)
       .then(response => {
-        console.log(response)
-        // dispatch(summaryReceived(response.data))
+        dispatch(summaryReceived(response.data))
       })
   }
 }
@@ -58,4 +57,9 @@ export const fetchGameSummary = (gameId) => {
 export const roundChanged = (ordinality) => ({
   type: 'ROUND_CHANGED',
   ordinality: ordinality
+})
+
+export const summaryReceived = ({ sequences }) => ({
+  type: 'SUMMARY_RECEIVED',
+  sequences: sequences
 })
