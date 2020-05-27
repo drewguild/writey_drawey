@@ -32,6 +32,12 @@ defmodule WriteyDrawey.Game do
     Repo.get_by!(Game, code: code)
   end
 
+  def get_rounds(id) do
+    Repo.all(from r in Round,
+              where: r.game_id == ^id,
+              order_by: r.ordinality)
+  end
+
   def get_players(id) do 
     Repo.all(from p in Player,
               where: p.game_id == ^id,
