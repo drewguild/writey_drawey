@@ -8,6 +8,8 @@ An online game inspired by Telestrations or as we called it's informal version i
 
 See the app [here](https://writey-drawey.herokuapp.com/).
 
+State is persisted per-browser tab so if you want to check it out solo, just open 4 tabs (current player minimum). 
+
 ## Purpose
 
 To learn Phoenix the hard way (by just diving into a project) and to practice building a non-trivial React app from square one.
