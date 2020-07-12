@@ -15,7 +15,6 @@ function EndSequences(props) {
   const sequences = useSelector(state => state.summary.sequences)
   // TODO: enhancement, initial state should probably match player's first prompt
   const [value, setValue] = useState(sequences[0].initial)
-  console.log("value set")
   return (
     <div>
       <div value={value} >
