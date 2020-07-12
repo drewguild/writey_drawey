@@ -34,8 +34,10 @@ defmodule WriteyDraweyWeb.PromptsController do
     render conn, "prompt.json", %{prompt: prompt}
   end
 
-  def random(conn, _params) do
-    prompt = Prompt.generate!
+  # Used to generate a starting promt
+  def random(conn, %{"game_id" => game_id, "player_id" => player_id}) do
+    round = Round.find!(String.to_integer(game_id), 0)
+    prompt = Prompt.generate!(%{ player_id: String.to_integer(player_id), round_id: round.id })
     render conn, "prompt.json", %{prompt: prompt}
   end
 

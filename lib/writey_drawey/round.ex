@@ -22,6 +22,13 @@ defmodule WriteyDrawey.Round do
     |> validate_required([:game_id, :ordinality])
   end
 
+  def find(game_id, ordinality) do
+    Repo.one(from r in Round, 
+      where: r.game_id == ^game_id, 
+      where: r.ordinality == ^ordinality
+    )
+  end
+  
   def find!(game_id, ordinality) do
     Repo.one!(from r in Round, 
       where: r.game_id == ^game_id, 
@@ -44,9 +51,10 @@ defmodule WriteyDrawey.Round do
     end
   end
 
+  # TODO: this should return in player order
   def get_submissions(round) do
-    drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id)
-    prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id)
+    drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id, order_by: d.player_id)
+    prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id, order_by: p.player_id)
 
     Enum.concat(drawings, prompts)
   end

@@ -1,7 +1,6 @@
 import { Games } from '../api'
 import { currentPlayerSet } from './index'
 
-// Game Action Creators
 export const gameReceived = (id, code) => ({
   type: 'GAME_RECEIVED',
   game_id: id,
@@ -46,7 +45,21 @@ export const createGame = (playerName) => {
   }
 }
 
+export const fetchGameSummary = (gameId) => {
+  return dispatch => {
+    Games.summary(gameId)
+      .then(response => {
+        dispatch(summaryReceived(response.data))
+      })
+  }
+}
+
 export const roundChanged = (ordinality) => ({
   type: 'ROUND_CHANGED',
   ordinality: ordinality
+})
+
+export const summaryReceived = ({ sequences }) => ({
+  type: 'SUMMARY_RECEIVED',
+  sequences: sequences
 })

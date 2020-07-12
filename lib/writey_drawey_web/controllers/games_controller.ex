@@ -48,4 +48,13 @@ defmodule WriteyDraweyWeb.GamesController do
 
     render(conn, "players.json", %{players: players})
   end
+
+  def summary(conn, %{"id" => id}) do
+    id = String.to_integer(id)
+
+    sequences = Sequence.initialize_from_game(id)
+    |> Sequence.add_entries(id)
+
+    json(conn, %{game_id: id, sequences: sequences})
+  end 
 end

@@ -3,7 +3,7 @@ defmodule WriteyDrawey.Prompt do
   import Ecto.Changeset
   import Ecto.Query, only: [from: 2]
 
-  alias WriteyDrawey.{Drawing, Prompt, Repo}
+  alias WriteyDrawey.{Drawing, Player, Prompt, Repo, Round}
 
   schema "prompts" do
     # TODO remove the drawing/prompt relationship
@@ -23,8 +23,8 @@ defmodule WriteyDrawey.Prompt do
     |> validate_required([:text])
   end
 
-  def generate! do
-    changeset(%WriteyDrawey.Prompt{}, %{text: random})
+  def generate!(%{player_id: player_id, round_id: round_id}) do
+    changeset(%WriteyDrawey.Prompt{}, %{text: random, round_id: round_id, player_id: player_id})
     |> Repo.insert!
   end
 
