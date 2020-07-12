@@ -41,6 +41,6 @@ export const Prompts = {
     axios.post("/api/prompts", { text: text, game_id: gameId, player_id: playerId, round: round }),
   next: (playerId, round) =>
     axios.get(`/api/prompts/next?player_id=${playerId}&round=${round}`),
-  random: () =>
-    axios.get("/api/prompts/random")
+  random: (gameId, playerId) =>
+    axios.get(`/api/prompts/random?game_id=${gameId}&player_id=${playerId}`)
 }

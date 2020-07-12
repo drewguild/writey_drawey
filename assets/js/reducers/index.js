@@ -70,9 +70,11 @@ const prompt = (state = { id: null, text: null }, action) => {
   }
 };
 
-const summary = (state = { sequences: [] }, action) => {
+const summary = (state = { sequences: [{ initial: null, entries: [] }] }, action) => {
   switch (action.type) {
     case 'SUMMARY_RECEIVED':
+      console.log("summary received")
+      console.log(action.sequences)
       return { sequences: action.sequences }
     default:
       return state

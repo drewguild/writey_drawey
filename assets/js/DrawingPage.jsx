@@ -55,7 +55,7 @@ class DrawingPage extends React.Component {
 
   fetchPrompt() {
     if (this.props.isFirstRound) {
-      this.props.fetchRandomPrompt()
+      this.props.fetchRandomPrompt(this.props.gameId, this.props.currentPlayer)
     } else {
       this.props.fetchNextPrompt(this.props.currentPlayer, this.props.round - 1)
     }
@@ -70,7 +70,7 @@ class DrawingPage extends React.Component {
       <div>
         <Prompt />
         <DrawingCanvas />
-        <Timer time={90} />
+        <Timer time={30} />
       </div>
     )
   }

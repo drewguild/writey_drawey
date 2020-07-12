@@ -53,8 +53,8 @@ defmodule WriteyDrawey.Round do
 
   # TODO: this should return in player order
   def get_submissions(round) do
-    drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id)
-    prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id)
+    drawings = Repo.all(from d in Drawing, where: d.round_id == ^round.id, order_by: d.player_id)
+    prompts = Repo.all(from p in Prompt, where: p.round_id == ^round.id, order_by: p.player_id)
 
     Enum.concat(drawings, prompts)
   end

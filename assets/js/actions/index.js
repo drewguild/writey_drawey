@@ -4,9 +4,9 @@ export * from './GameActions'
 export * from './PlayerActions'
 
 // Prompt Action Creators
-export const fetchRandomPrompt = () => {
+export const fetchRandomPrompt = (gameId, playerId) => {
   return dispatch => {
-    Prompts.random()
+    Prompts.random(gameId, playerId)
       .then((response) => {
         dispatch(promptReceived(response.data.id, response.data.prompt))
       })

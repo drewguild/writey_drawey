@@ -30,6 +30,7 @@ defmodule Sequence do
 
   def submission_groups(game_id) do
     submissions_for_rounds(game_id)
+    |> filter_empty
     |> realign_matrix
     |> rotate_matrix
     |> Enum.map( fn row -> Enum.map(row, &reformat/1) end)
@@ -37,6 +38,10 @@ defmodule Sequence do
 
   def reformat(%Drawing{} = drawing), do: %{ "type" => "DRAWING", "value" => drawing.image_binary }
   def reformat(%Prompt{} = prompt), do: %{ "type" =>"TEXT", "value" => prompt.text }
+
+  def filter_empty(matrix) do
+    Enum.filter(matrix, fn row -> !Enum.empty?(row) end)
+  end
 
   # TODO: this probably doesn't belong here
   # List[List[Drawings | Prompts]]
@@ -60,10 +65,12 @@ defmodule Sequence do
 
   # TODO: these feel like they don't belong here
   # Copied from GH/reeesga
+  def left_rotate([], _), do: []
   def left_rotate(list, 0), do: list
 	def left_rotate([head | tail], 1), do: tail ++ [head]
-  def left_rotate(list, n) when n > 0, do: left_rotate(left_rotate(list, 1), n-1)
-  def right_rotate(list, n) when n > 0, do: Enum.reverse(list) |> left_rotate(n) |> Enum.reverse
+  def left_rotate(list, n) when (n > 0), do: left_rotate(left_rotate(list, 1), n-1)
+
+  def right_rotate(list, n) when (n > 0), do: Enum.reverse(list) |> left_rotate(n) |> Enum.reverse
 	def right_rotate(list, n), do: left_rotate(list, -n)
 
   def add_initial(sequence, text), 

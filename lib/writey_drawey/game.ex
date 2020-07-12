@@ -8,6 +8,7 @@ defmodule WriteyDrawey.Game do
   schema "games" do
     field :code, :string
     has_many :players, Player
+    has_many :rounds, Round
 
     timestamps()
   end
@@ -47,6 +48,7 @@ defmodule WriteyDrawey.Game do
   def initialize_with_player(name) do
     changeset(%Game{}, %{code: random_code, })
     |> Ecto.Changeset.put_assoc(:players, [%Player{name: name}])
+    |> Ecto.Changeset.put_assoc(:rounds, [%Round{ordinality: 0}])
     |> Repo.insert!
   end
 
