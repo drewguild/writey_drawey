@@ -80,7 +80,11 @@ class GuessDrawingPage extends React.Component {
 
   render() {
     if (this.state.toNextRound) {
-      return <Redirect to="/draw" />
+      if (this.props.isLastRound) {
+        return <Redirect to="/end" />
+      } else {
+        return <Redirect to="/draw" />
+      }
     }
 
     if (this.state.waiting) {
@@ -105,6 +109,7 @@ const mapDispatch = {
 const mapState = (state) => ({
   currentPlayer: state.player.currentPlayer,
   gameId: state.game.id,
+  isLastRound: state.game.round >= (state.player.players.length - state.player.players.length % 2),
   round: state.game.round,
   shouldSubmit: state.timer.expired
 })
