@@ -41,7 +41,7 @@ const mapState = (state, ownProps) => {
   const player = _.find(state.player.players, (player) => { return player.name == ownProps.name })
 
   return {
-    enoughPlayers: state.player.players.length > 1,
+    enoughPlayers: state.player.players.length > 3,
     isCurrentPlayer: state.player.currentPlayer == ownProps.id,
     isPlayerReady: player.status == 'READY'
   }
