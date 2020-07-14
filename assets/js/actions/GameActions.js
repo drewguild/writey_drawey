@@ -1,5 +1,5 @@
 import { Games } from '../api'
-import { currentPlayerSet } from './index'
+import { currentPlayerSet, errorReceived } from './index'
 
 export const gameReceived = (id, code) => ({
   type: 'GAME_RECEIVED',
@@ -14,6 +14,9 @@ export const addPlayer = (gameCode, playerName) => {
         dispatch(currentPlayerSet(response.data.players[0]))
         dispatch(gameReceived(response.data.game_id, response.data.game_code))
       })
+      .catch(error => {
+        dispatch(errorReceived(error.response.data.errors.details))
+      });
   }
 }
 

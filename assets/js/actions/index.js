@@ -3,6 +3,13 @@ import { Prompts } from '../api'
 export * from './GameActions'
 export * from './PlayerActions'
 
+// Error Action Creators
+export const errorReceived = (message) => ({
+  type: "ERROR_RECEIVED",
+  message: message
+})
+
+
 // Prompt Action Creators
 export const fetchRandomPrompt = (gameId, playerId) => {
   return dispatch => {

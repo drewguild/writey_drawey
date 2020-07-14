@@ -71,13 +71,15 @@ class LandingPage extends React.Component {
             Join
           </button>
         </div>
+        <span>{this.props.errorMessage}</span>
       </div >
     )
   };
 };
 
 const mapState = (state) => ({
-  activeGame: !!state.game.id
+  activeGame: !!state.game.id,
+  errorMessage: state.error.message
 })
 
 const mapDispatch = {
