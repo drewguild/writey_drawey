@@ -9,6 +9,11 @@ class LandingPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      gameCode: null,
+      playerName: null
+    }
+
     this.joinGame = this.joinGame.bind(this);
     this.newGame = this.newGame.bind(this);
     this.setGameCode = this.setGameCode.bind(this);
@@ -47,12 +52,24 @@ class LandingPage extends React.Component {
     return (
       <div>
         <div>
-          <input placeholder="Enter game ID" onChange={this.setGameCode} />
-          <button onClick={this.joinGame}>Join</button>
+          <input placeholder="Enter a (nick)name" onChange={this.setPlayerName} />
         </div>
         <div>
-          <input placeholder="Enter a (nick)name" onChange={this.setPlayerName} />
-          <button onClick={this.newGame}>New Game</button>
+          <input placeholder="Enter game ID" onChange={this.setGameCode} />
+        </div>
+        <div>
+          <button 
+            onClick={this.newGame}
+            disabled={!this.state.playerName}
+          >
+            New Game
+          </button>
+          <button 
+            onClick={this.joinGame}
+            disabled={!this.state.playerName || !this.state.gameCode}
+          >
+            Join
+          </button>
         </div>
       </div >
     )
