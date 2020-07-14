@@ -14,13 +14,19 @@ defmodule WriteyDraweyWeb.GamesController do
   end
 
   def add_player(conn, %{"code" => code, "player_name" => player_name}) do
-    game = Game.add_player(code, %{name: player_name})
-
-    json(conn, %{
-      game_id: game.id, 
-      game_code: game.code,
-      players: Enum.map(game.players, &(&1.id)) 
-    })
+    case Game.add_player(code, %{name: player_name}) do
+      game = %Game{} ->
+        json(conn, %{
+          game_id: game.id, 
+          game_code: game.code,
+          players: Enum.map(game.players, &(&1.id)) 
+        })
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> put_view(WriteyDraweyWeb.ErrorView)
+        |> render("404.json", message: "Game not found")
+    end
   end
 
   def check_round(conn, %{"id" => id, "round" => round}) do

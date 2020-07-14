@@ -5,6 +5,30 @@ defmodule WriteyDrawey.GamesControllerTest do
 
   alias WriteyDrawey.{Drawing, Game, Prompt, Round}
 
+  describe "add_player" do
+    test "when a game exists, return the game IDs and player list" do
+      %{id: game_id, code: game_code} = Game.initialize_with_player("Testy")
+      name = "Otherdude"
+
+      conn = put(build_conn(), Routes.games_path(build_conn(), :add_player, game_code, %{player_name: name}))
+
+      assert %{"game_id" => id, "game_code" => code, "players" => players } = json_response(conn, 200)
+      assert id == game_id
+      assert code == game_code
+      assert is_list(players)
+    end
+
+    test "when a nonexistent game code is supplied, returns 404" do
+      %{code: _game_code} = Game.initialize_with_player("Testy")
+      name = "Otherdude"
+      bad_code = "0"
+
+      conn = put(build_conn(), Routes.games_path(build_conn(), :add_player, bad_code, %{player_name: name}))
+
+      assert json_response(conn, 404) == %{"errors" => %{"details" => "Game not found"}}
+    end
+  end
+
   describe "summary" do
     # TODO: rethink what happens when the game is unstarted 
     # (shouldn't happen.. but.. for the sake of a good API)

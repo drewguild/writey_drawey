@@ -7,6 +7,10 @@ defmodule WriteyDraweyWeb.ErrorView do
   #   "Internal Server Error"
   # end
 
+  def render("404.json", assigns) do
+    %{errors: %{ details: assigns[:message] || "Not found"}}
+  end
+
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".

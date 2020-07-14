@@ -1,6 +1,15 @@
 import { combineReducers } from 'redux';
 import _ from 'lodash';
 
+const error = (state = { message: null }, action) => {
+  switch(action.type) {
+    case "ERROR_RECEIVED":
+      return { message: action.message}
+    default:
+      return state;
+  }
+}
+
 const game = (state = { id: null, code: null, round: null }, action) => {
   switch (action.type) {
     case 'GAME_RECEIVED':
@@ -91,6 +100,7 @@ const timer = (state = { expired: false }, action) => {
 };
 
 const rootReducer = combineReducers({
+  error,
   game,
   player,
   prompt,
