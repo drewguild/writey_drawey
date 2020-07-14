@@ -21,12 +21,17 @@ defmodule WriteyDrawey.Game do
   end
 
   def add_player(code, %{name: name}) do
-    game = get_by_code(code) |> Repo.preload(:players)
+    try do
+      game = get_by_code(code) 
+      |> Repo.preload(:players)
 
-    game
-    |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:players, [%Player{name: name} | game.players ])
-    |> Repo.update!
+      game
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_assoc(:players, [%Player{name: name} | game.players ])
+      |> Repo.update!
+    rescue
+      e in Ecto.NoResultsError -> nil
+    end
   end
 
   def get_by_code(code) do
